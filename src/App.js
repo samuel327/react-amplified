@@ -6,6 +6,8 @@ import { listTodos } from './graphql/queries';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import { NavBar } from './layout/toolBar';
+import { Button } from '@material-ui/core';
+import { DoughnutBudget } from './components/charts/DoughnutBudget';
 
 Amplify.configure(awsExports);
 
@@ -54,17 +56,17 @@ const App = () => {
           onChange={(event) => setInput('name', event.target.value)}
           style={styles.input}
           value={formState.name}
-          placeholder="Name"
+          placeholder="Expense"
         />
         <input
           onChange={(event) => setInput('description', event.target.value)}
           style={styles.input}
           value={formState.description}
-          placeholder="Description"
+          placeholder="Amount"
         />
-        <button style={styles.button} onClick={addTodo}>
+        <Button color="primary" style={styles.button} onClick={addTodo}>
           Create Todo
-        </button>
+        </Button>
         {todos.map((todo, index) => (
           <div key={todo.id ? todo.id : index} style={styles.todo}>
             <p style={styles.todoName}>{todo.name}</p>
@@ -72,6 +74,7 @@ const App = () => {
           </div>
         ))}
       </div>
+      <DoughnutBudget />
     </>
   );
 };
@@ -97,8 +100,7 @@ const styles = {
   todoName: { fontSize: 20, fontWeight: 'bold' },
   todoDescription: { marginBottom: 0 },
   button: {
-    backgroundColor: 'black',
-    color: 'white',
+    //backgroundColor: 'black',
     outline: 'none',
     fontSize: 18,
     padding: '12px 0px',
