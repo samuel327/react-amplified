@@ -19,8 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const NavBar = () => {
+export const NavBar = (props) => {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -30,6 +31,7 @@ export const NavBar = () => {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
+            onClick={() => props.toggleDrawer()}
           >
             <MenuIcon />
           </IconButton>

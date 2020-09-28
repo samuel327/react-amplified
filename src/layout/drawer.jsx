@@ -19,10 +19,48 @@ const useStyles = makeStyles({
     width: 'auto',
   },
 });
-export const drawer = () => {
+export const DrawerMenu = (props) => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    left: false,
-  });
-  return <div></div>;
+
+  const list = (anchor) => (
+    <div
+      className={clsx(classes.list, {
+        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+      })}
+      role="presentation"
+      onClick={() => props.toggleDrawer()}
+      onKeyDown={() => props.toggleDrawer()}
+    >
+      <List>
+        {['ToDo', 'Budget'].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+    </div>
+  );
+
+  return (
+    <div>
+      {' '}
+      <div>
+        {props.sideMenuState && (
+          <React.Fragment key={'left'}>
+            <Drawer
+              anchor={'left'}
+              open={props.sideMenuState}
+              onClose={() => props.toggleDrawer()}
+            >
+              {list('left')}
+            </Drawer>
+          </React.Fragment>
+        )}
+      </div>
+    </div>
+  );
 };
