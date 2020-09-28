@@ -11,11 +11,12 @@ export class DoughnutBudget extends React.Component {
       type: 'doughnut',
       data: {
         //Bring in data
-        labels: ['Jan', 'Feb', 'March'],
+        labels: this.props.labels,
         datasets: [
           {
-            label: 'Sales',
-            data: [86, 67, 91],
+            label: this.props.dataSetLabel,
+            data: this.props.dollarAmounts,
+            backgroundColor: this.props.itemColor,
           },
         ],
       },

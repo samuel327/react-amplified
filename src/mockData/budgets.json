@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "month": "January",
+      "amount_spent": "2000"
+    },
+    {
+      "month": "February",
+      "amount_spent": "1000"
+    },
+    {
+      "month": "March",
+      "amount_spent": "7000"
+    },
+    {
+      "month": "April",
+      "amount_spent": "200"
+    },
+    {
+      "month": "May",
+      "amount_spent": "500"
+    },
+    {
+      "month": "June",
+      "amount_spent": "100"
+    },
+    {
+      "month": "July",
+      "amount_spent": "200"
+    },
+    {
+      "month": "August",
+      "amount_spent": "100"
+    },
+    {
+      "month": "September",
+      "amount_spent": "70"
+    },
+    {
+      "month": "October",
+      "amount_spent": "200"
+    },
+    {
+      "month": "November",
+      "amount_spent": "500"
+    },
+    {
+      "month": "December",
+      "amount_spent": "100"
+    }
+  ]
+}

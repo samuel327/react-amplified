@@ -1,14 +1,14 @@
 /* src/App.js */
 import React, { useEffect, useState } from 'react';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import { createTodo } from './graphql/mutations';
+import { createTodo, deleteTodo } from './graphql/mutations';
 import { listTodos } from './graphql/queries';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import { NavBar } from './layout/toolBar';
 import { Button } from '@material-ui/core';
 import { DoughnutBudget } from './components/charts/DoughnutBudget';
-
+import * as budget from './mockData/budgets.json';
 Amplify.configure(awsExports);
 
 const initialState = { name: '', description: '' };
@@ -47,6 +47,15 @@ const App = () => {
     }
   }
 
+  async function removeToDo(todo) {
+    try {
+      console.log(todo);
+      await API.graphql(graphqlOperation(deleteTodo, { input: todo }));
+    } catch (err) {
+      console.log('error deleting todo:', err);
+    }
+  }
+
   return (
     <>
       <NavBar />
@@ -56,13 +65,13 @@ const App = () => {
           onChange={(event) => setInput('name', event.target.value)}
           style={styles.input}
           value={formState.name}
-          placeholder="Expense"
+          placeholder="name"
         />
         <input
           onChange={(event) => setInput('description', event.target.value)}
           style={styles.input}
           value={formState.description}
-          placeholder="Amount"
+          placeholder="description"
         />
         <Button color="primary" style={styles.button} onClick={addTodo}>
           Create Todo
@@ -71,10 +80,28 @@ const App = () => {
           <div key={todo.id ? todo.id : index} style={styles.todo}>
             <p style={styles.todoName}>{todo.name}</p>
             <p style={styles.todoDescription}>{todo.description}</p>
+            <Button
+              color="primary"
+              style={styles.button}
+              onClick={() => removeToDo(todo)}
+            >
+              Delete Todo
+            </Button>
           </div>
         ))}
       </div>
-      <DoughnutBudget />
+      <DoughnutBudget
+        labels={budget.data.map((item) => item.month)}
+        dataSetLabel={'Amount Spent Per Month'}
+        dollarAmounts={budget.data.map((item) => item.amount_spent)}
+        itemColor={budget.data.map((item) => {
+          if (item.amount_spent < 1000) {
+            return 'rgb(0, 255, 0)';
+          } else {
+            return 'rgb(255, 0, 0)';
+          }
+        })}
+      />
     </>
   );
 };
