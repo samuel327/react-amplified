@@ -6,7 +6,6 @@ import { listTodos } from './graphql/queries';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import { NavBar } from './layout/toolBar';
-import { Button } from '@material-ui/core';
 import { DoughnutBudget } from './components/charts/DoughnutBudget';
 import { DrawerMenu } from './layout/drawer';
 import * as budget from './mockData/budgets.json';
@@ -14,8 +13,6 @@ import { ToDo } from './components/Todo/ToDo';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 Amplify.configure(awsExports);
-
-const initialState = { name: '', description: '' };
 
 const App = () => {
   //control drawer
@@ -44,12 +41,9 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/todo" component={ToDo} />
-          <Route path="/budget" component={() => X} />
+          <Route path="/budget" render={() => X} />
         </Switch>
       </Router>
-      {/* <NavBar toggleDrawer={toggleDrawer} />
-      <DrawerMenu sideMenuState={sideMenuState} toggleDrawer={toggleDrawer} /> */}
-      {/* <ToDo /> */}
     </>
   );
 };

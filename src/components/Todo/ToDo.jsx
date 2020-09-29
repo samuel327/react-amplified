@@ -4,6 +4,7 @@ import { createTodo, deleteTodo } from '../../graphql/mutations';
 import { listTodos } from '../../graphql/queries';
 import awsExports from '../../aws-exports';
 import { Button } from '@material-ui/core';
+import { ToDoCard } from './ToDoCard';
 
 Amplify.configure(awsExports);
 
@@ -59,37 +60,45 @@ export const ToDo = () => {
   }
 
   return (
-    <div style={styles.container}>
-      <h2>Amplify Todos</h2>
-      <input
-        onChange={(event) => setInput('name', event.target.value)}
-        style={styles.input}
-        value={formState.name}
-        placeholder="name"
-      />
-      <input
-        onChange={(event) => setInput('description', event.target.value)}
-        style={styles.input}
-        value={formState.description}
-        placeholder="description"
-      />
-      <Button color="primary" style={styles.button} onClick={addTodo}>
-        Create Todo
-      </Button>
-      {todos.map((todo, index) => (
-        <div key={todo.id ? todo.id : index} style={styles.todo}>
-          <p style={styles.todoName}>{todo.name}</p>
-          <p style={styles.todoDescription}>{todo.description}</p>
-          <Button
-            color="primary"
-            style={styles.button}
-            onClick={() => removeToDo(todo)}
-          >
-            Delete Todo
-          </Button>
-        </div>
-      ))}
-    </div>
+    <>
+      <div style={styles.container}>
+        <h2>Amplify Todos</h2>
+        <input
+          onChange={(event) => setInput('name', event.target.value)}
+          style={styles.input}
+          value={formState.name}
+          placeholder="name"
+        />
+        <input
+          onChange={(event) => setInput('description', event.target.value)}
+          style={styles.input}
+          value={formState.description}
+          placeholder="description"
+        />
+        <Button color="primary" style={styles.button} onClick={addTodo}>
+          Create Todo
+        </Button>
+      </div>
+      <div style={{ display: 'flex' }}>
+        {todos.map((todo, index) => (
+          <div key={todo.id ? todo.id : index} style={styles.todo}>
+            <ToDoCard
+              name={todo.name}
+              description={todo.description}
+              button={
+                <Button
+                  color="primary"
+                  style={styles.button}
+                  onClick={() => removeToDo(todo)}
+                >
+                  Delete
+                </Button>
+              }
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 const styles = {
