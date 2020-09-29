@@ -34,18 +34,22 @@ export const DrawerMenu = (props) => {
       onKeyDown={() => props.toggleDrawer()}
     >
       <List>
-        {['ToDo', 'Budget'].map((text, index) => (
-          <ListItem button key={text}>
+        <Link to={'/todo'}>
+          <ListItem button key={'ToDo'}>
             <ListItemIcon>
-              {index % 2 === 0 ? (
-                <FaIcons.FaCheckSquare />
-              ) : (
-                <FaIcons.FaMoneyBill />
-              )}
+              <FaIcons.FaCheckSquare />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={'ToDo'} />
           </ListItem>
-        ))}
+        </Link>
+        <Link to={'/budget'}>
+          <ListItem button key={'Budget'}>
+            <ListItemIcon>
+              <FaIcons.FaMoneyBill />
+            </ListItemIcon>
+            <ListItemText primary={'Budget'} />
+          </ListItem>
+        </Link>
       </List>
       <Divider />
     </div>
