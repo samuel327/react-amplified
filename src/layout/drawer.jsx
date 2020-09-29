@@ -10,6 +10,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import { Link } from 'react-router-dom';
+import * as FaIcons from 'react-icons/fa';
 
 const useStyles = makeStyles({
   list: {
@@ -35,7 +37,11 @@ export const DrawerMenu = (props) => {
         {['ToDo', 'Budget'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index % 2 === 0 ? (
+                <FaIcons.FaCheckSquare />
+              ) : (
+                <FaIcons.FaMoneyBill />
+              )}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>

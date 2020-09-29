@@ -11,6 +11,7 @@ import { DoughnutBudget } from './components/charts/DoughnutBudget';
 import { DrawerMenu } from './layout/drawer';
 import * as budget from './mockData/budgets.json';
 import { ToDo } from './components/Todo/ToDo';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 Amplify.configure(awsExports);
 
 const initialState = { name: '', description: '' };
@@ -18,55 +19,7 @@ const initialState = { name: '', description: '' };
 const App = () => {
   //control drawer
   const [sideMenuState, setSideMenuState] = useState(false);
-
   const toggleDrawer = () => setSideMenuState(!sideMenuState);
-
-  const [formState, setFormState] = useState(initialState);
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  function setInput(key, value) {
-    setFormState({ ...formState, [key]: value });
-  }
-
-  async function fetchTodos() {
-    try {
-      const todoData = await API.graphql(graphqlOperation(listTodos));
-      const todos = todoData.data.listTodos.items;
-      setTodos(todos);
-    } catch (err) {
-      console.log('error fetching todos');
-    }
-  }
-
-  async function addTodo() {
-    try {
-      if (!formState.name || !formState.description) return;
-      const todo = { ...formState };
-      console.log(todo);
-      setTodos([...todos, todo]);
-      setFormState(initialState);
-      await API.graphql(graphqlOperation(createTodo, { input: todo }));
-    } catch (err) {
-      console.log('error creating todo:', err);
-    }
-  }
-
-  async function removeToDo(todo) {
-    try {
-      await API.graphql(
-        graphqlOperation(deleteTodo, {
-          input: { id: todo.id },
-        })
-      );
-      await fetchTodos();
-    } catch (err) {
-      console.log('error deleting todo:', err);
-    }
-  }
 
   return (
     <>
