@@ -41,7 +41,7 @@ export function ToDoCard(props) {
           {props.description}
         </Typography>
       </CardContent>
-      <CardActions style={classes.btn}>{props.button}</CardActions>
+      <CardActions className={classes.btn}>{props.button}</CardActions>
     </Card>
   );
 }
