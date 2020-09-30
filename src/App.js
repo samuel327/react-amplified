@@ -12,6 +12,7 @@ import * as budget from './mockData/budgets.json';
 import { ToDo } from './components/Todo/ToDo';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ExpensesCalculator } from './pages/ExpensesCalculator';
 Amplify.configure(awsExports);
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route path="/todo" component={ToDo} />
           <Route path="/budget" render={() => X} />
+          <Route path="/calculator" component={ExpensesCalculator} />
         </Switch>
       </Router>
     </>

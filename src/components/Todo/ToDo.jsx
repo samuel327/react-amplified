@@ -3,7 +3,7 @@ import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import { createTodo, deleteTodo } from '../../graphql/mutations';
 import { listTodos } from '../../graphql/queries';
 import awsExports from '../../aws-exports';
-import { Button } from '@material-ui/core';
+import { Button, Paper, TextField } from '@material-ui/core';
 import { ToDoCard } from './ToDoCard';
 
 Amplify.configure(awsExports);
@@ -61,24 +61,27 @@ export const ToDo = () => {
 
   return (
     <>
-      <div style={styles.container}>
-        <h2>Amplify Todos</h2>
-        <input
-          onChange={(event) => setInput('name', event.target.value)}
-          style={styles.input}
-          value={formState.name}
-          placeholder="name"
-        />
-        <input
-          onChange={(event) => setInput('description', event.target.value)}
-          style={styles.input}
-          value={formState.description}
-          placeholder="description"
-        />
-        <Button color="primary" style={styles.button} onClick={addTodo}>
-          Create Todo
-        </Button>
-      </div>
+      <Paper style={styles.container}>
+        <div style={styles.container}>
+          <h2>Amplify Todos</h2>
+          <TextField
+            onChange={(event) => setInput('name', event.target.value)}
+            style={styles.input}
+            value={formState.name}
+            placeholder="name"
+          />
+          <TextField
+            onChange={(event) => setInput('description', event.target.value)}
+            style={styles.input}
+            value={formState.description}
+            placeholder="description"
+          />
+          <Button color="primary" style={styles.button} onClick={addTodo}>
+            Create Todo
+          </Button>
+        </div>
+      </Paper>
+
       <div style={{ display: 'flex' }}>
         {todos.map((todo, index) => (
           <div key={todo.id ? todo.id : index} style={styles.todo}>
@@ -104,7 +107,7 @@ export const ToDo = () => {
 const styles = {
   container: {
     width: 400,
-    margin: '0 auto',
+    margin: '25px auto',
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
@@ -114,10 +117,11 @@ const styles = {
   todo: { marginBottom: 15 },
   input: {
     border: 'none',
-    backgroundColor: '#ddd',
+    //backgroundColor: '#ddd',
     marginBottom: 10,
     padding: 8,
     fontSize: 18,
+    width: 350,
   },
   todoName: { fontSize: 20, fontWeight: 'bold' },
   todoDescription: { marginBottom: 0 },
@@ -126,5 +130,6 @@ const styles = {
     outline: 'none',
     fontSize: 18,
     padding: '12px 0px',
+    width: 350,
   },
 };

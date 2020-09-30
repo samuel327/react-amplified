@@ -29,10 +29,9 @@ const useStyles = makeStyles({
 
 export function ToDoCard(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} zDepth={14}>
       <CardContent>
         <Typography variant="h5" component="h2">
           {props.name}
