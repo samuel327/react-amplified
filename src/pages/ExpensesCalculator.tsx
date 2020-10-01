@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { Button, Paper, TextField } from '@material-ui/core';
+import React, { SetStateAction, useState } from 'react';
+import { Button, MenuItem, Paper, TextField } from '@material-ui/core';
 import { DoughnutBudget } from '../components/charts/DoughnutBudget';
 
-type Fun = 'fun';
-type NotFun = 'not fun';
+const labels = ['fun', 'not_fun'];
 
 type Expense = {
   expenseName: string;
   dollarAmount: number;
-  category: Fun | NotFun | string;
+  category: string;
 };
+
+const defaultPieChartState = [
+  { label: 'fun', amount_spent: 0 },
+  { label: 'not_fun', amount_spent: 0 },
+];
 
 export function ExpensesCalculator() {
   const [totalAmount, updateTotalAmount] = useState<number>(0);
@@ -18,13 +22,19 @@ export function ExpensesCalculator() {
     dollarAmount: 0,
     category: 'fun',
   });
-  const [expenses, setExpenses] = useState<Expense[]>([
-    { expenseName: 'Example', dollarAmount: 1000, category: 'fun' },
-    { expenseName: 'Example 2', dollarAmount: 500, category: 'not fun' },
-    { expenseName: 'Example 3', dollarAmount: 700, category: 'fun' },
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+
+  const [funObject, setFunObject] = useState<any>({ fun: 0 });
+  const [notFunObject, setNotFunObject] = useState<any>({ not_fun: 0 });
+  const [dataForGraph, setDataForGraph] = useState<any>([
+    { label: 'fun', amount_spent: 0 },
+    { label: 'not_fun', amount_spent: 0 },
   ]);
 
-  const [labels, setLabels] = useState<string[]>(['Fun', 'Not Fun']);
+  const [label, setLabel] = useState<string>('fun');
+  const handleChangeLabel = (event: any) => {
+    setLabel(event.target.value);
+  };
   return (
     <div>
       <TextField
@@ -47,7 +57,16 @@ export function ExpensesCalculator() {
           setItem(cpy);
         }}
       />
-      <TextField placeholder={'Categories'} />
+      <TextField
+        placeholder={'Categories'}
+        select
+        value={label}
+        onChange={handleChangeLabel}
+      >
+        {labels.map((option) => {
+          return <MenuItem value={option}>{option}</MenuItem>;
+        })}
+      </TextField>
 
       <Button
         onClick={() => {
@@ -56,16 +75,37 @@ export function ExpensesCalculator() {
             let item2: number = Number(item.dollarAmount);
 
             setItem({ expenseName: '', dollarAmount: 0, category: 'not fun' });
+
+            if (label === 'fun') {
+              let cpy = funObject;
+              cpy.fun = Number(cpy.fun) + Number(item.dollarAmount);
+              setFunObject(cpy);
+              let cpy2 = dataForGraph;
+              cpy2[0].amount_spent =
+                Number(cpy2[0].amount_spent) + Number(cpy.fun);
+              setDataForGraph(cpy2);
+            }
+            if (label === 'not_fun') {
+              let cpy = notFunObject;
+              cpy.fun = Number(cpy.not_fun) + Number(item.dollarAmount);
+              console.log(cpy.fun);
+              setNotFunObject(cpy);
+              let cpy2 = dataForGraph;
+              cpy2[1].amount_spent =
+                Number(cpy2[1].amount_spent) + Number(cpy.fun);
+              setDataForGraph(cpy2);
+            }
             return item1 + item2;
           });
           setExpenses(() => {
+            let fun: string = 'fun';
             return [
               ...expenses,
               ...[
                 {
                   expenseName: item.expenseName,
                   dollarAmount: item.dollarAmount,
-                  category: 'not fun',
+                  category: fun,
                 },
               ],
             ];
@@ -78,7 +118,7 @@ export function ExpensesCalculator() {
         onClick={() => {
           updateTotalAmount(0);
           setExpenses([]);
-          setLabels([]);
+          setDataForGraph(defaultPieChartState);
         }}
       >
         Clear
@@ -96,13 +136,11 @@ export function ExpensesCalculator() {
             );
           })}
         <DoughnutBudget
-          labels={labels}
+          labels={dataForGraph.map((item: any) => item.label)}
           dataSetLabel={'Amount Spent Per Category'}
-          dollarAmounts={expenses.map(
-            (expense: Expense) => expense.dollarAmount
-          )}
-          itemColor={expenses.map((item) => {
-            if (item.dollarAmount < 1000) {
+          dollarAmounts={dataForGraph.map((item: any) => item.amount_spent)}
+          itemColor={dataForGraph.map((item: any) => {
+            if (item.label === 'fun') {
               return 'rgb(0, 255, 0)';
             } else {
               return 'rgb(255, 0, 0)';

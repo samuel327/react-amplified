@@ -1,6 +1,5 @@
 import React from 'react';
 import Chart from 'chart.js';
-import { ThreeSixty } from '@material-ui/icons';
 
 export class DoughnutBudget extends React.Component {
   constructor(props) {
@@ -34,6 +33,7 @@ export class DoughnutBudget extends React.Component {
 
   componentDidUpdate() {
     console.log('UPDATED');
+    console.log(this.props.dollarAmounts);
     this.state.chart.data.datasets[0].data = this.props.dollarAmounts;
     this.state.chart.update();
   }
@@ -41,7 +41,6 @@ export class DoughnutBudget extends React.Component {
   render() {
     return (
       <div>
-        <div>{this.props.labels}</div>
         <canvas id="myChart" ref={this.chartRef} />
       </div>
     );
