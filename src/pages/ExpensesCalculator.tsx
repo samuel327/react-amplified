@@ -17,7 +17,16 @@ export function ExpensesCalculator() {
   ]);
   return (
     <div>
-      <TextField placeholder={'Expense Name'} />
+      <TextField
+        placeholder={'Expense Name'}
+        value={item.expenseName}
+        onChange={(e: any) => {
+          let name = e.target.value;
+          let cpy = JSON.parse(JSON.stringify(item));
+          cpy.expenseName = name;
+          setItem(cpy);
+        }}
+      />
       <TextField
         placeholder={'Dollar Amount'}
         value={item.dollarAmount}
@@ -41,7 +50,12 @@ export function ExpensesCalculator() {
           setExpenses(() => {
             return [
               ...expenses,
-              ...[{ expenseName: 'Changed', dollarAmount: item.dollarAmount }],
+              ...[
+                {
+                  expenseName: item.expenseName,
+                  dollarAmount: item.dollarAmount,
+                },
+              ],
             ];
           });
         }}
