@@ -8,7 +8,10 @@ type Expense = {
 
 export function ExpensesCalculator() {
   const [totalAmount, updateTotalAmount] = useState<number>(0);
-  const [itemExpense, setItemExpense] = useState<any>();
+  const [item, setItem] = useState<Expense>({
+    expenseName: 'Default',
+    dollarAmount: 0,
+  });
   const [expenses, setExpenses] = useState<Expense[]>([
     { expenseName: 'Example', dollarAmount: 1000 },
   ]);
@@ -17,23 +20,28 @@ export function ExpensesCalculator() {
       <TextField placeholder={'Expense Name'} />
       <TextField
         placeholder={'Dollar Amount'}
-        value={itemExpense}
-        onChange={(e: any) => setItemExpense(e.target.value)}
+        value={item.dollarAmount}
+        onChange={(e: any) => {
+          let num = e.target.value;
+          let cpy = JSON.parse(JSON.stringify(item));
+          cpy.dollarAmount = num;
+          setItem(cpy);
+        }}
       />
 
       <Button
         onClick={() => {
           updateTotalAmount((prev: any) => {
-            let item: number = Number(prev);
-            let item2: number = Number(itemExpense);
+            let item1: number = Number(prev);
+            let item2: number = Number(item.dollarAmount);
 
-            setItemExpense('');
-            return item + item2;
+            setItem({ expenseName: '', dollarAmount: 0 });
+            return item1 + item2;
           });
           setExpenses(() => {
             return [
               ...expenses,
-              ...[{ expenseName: 'Changed', dollarAmount: itemExpense }],
+              ...[{ expenseName: 'Changed', dollarAmount: item.dollarAmount }],
             ];
           });
         }}
