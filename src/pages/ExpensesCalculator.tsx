@@ -65,6 +65,7 @@ export function ExpensesCalculator() {
       <Button
         onClick={() => {
           updateTotalAmount(0);
+          setExpenses([]);
         }}
       >
         Clear
