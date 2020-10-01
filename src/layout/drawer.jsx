@@ -50,6 +50,14 @@ export const DrawerMenu = (props) => {
             <ListItemText primary={'Budget'} />
           </ListItem>
         </Link>
+        <Link to={'/calculator'}>
+          <ListItem button key={'Expenses'}>
+            <ListItemIcon>
+              <FaIcons.FaChartLine />
+            </ListItemIcon>
+            <ListItemText primary={'Budget'} />
+          </ListItem>
+        </Link>
       </List>
       <Divider />
     </div>
