@@ -24,7 +24,17 @@ export const NavBar = (props) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        style={{
+          background: 'linear-gradient(45deg, #000000 30%, #FFFF33 90%)',
+
+          color: 'white',
+
+          padding: '0 30px',
+          boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -38,7 +48,7 @@ export const NavBar = (props) => {
           <Typography variant="h6" className={classes.title}>
             React-Amplified
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button style={{ color: 'black' }}>Login</Button>
         </Toolbar>
       </AppBar>
     </div>
