@@ -162,6 +162,11 @@ export function ExpensesCalculator() {
             updateTotalAmount(0);
             setExpenses([]);
             setDataForGraph(deepCopy(defaultPieChartState));
+            setItem({
+              expenseName: `Expense 1`,
+              dollarAmount: 0,
+              category: 'not fun',
+            });
           }}
         >
           Clear
