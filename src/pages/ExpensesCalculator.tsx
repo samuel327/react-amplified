@@ -10,19 +10,28 @@ type Expense = {
   category: string;
 };
 
-const defaultPieChartState = [
+type PieChartItem = {
+  label: string;
+  amount_spent: number;
+};
+
+const defaultPieChartState: PieChartItem[] = [
   { label: 'fun', amount_spent: 0 },
   { label: 'not_fun', amount_spent: 0 },
 ];
 
+function deepCopy(arg: object) {
+  return JSON.parse(JSON.stringify(arg));
+}
 export function ExpensesCalculator() {
   const [totalAmount, updateTotalAmount] = useState<number>(0);
+
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [item, setItem] = useState<Expense>({
-    expenseName: 'Default',
+    expenseName: `Expense ${expenses.length + 1}`,
     dollarAmount: 0,
     category: 'fun',
   });
-  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [funObject, setFunObject] = useState<any>({ fun: 0 });
   const [notFunObject, setNotFunObject] = useState<any>({ not_fun: 0 });
@@ -35,6 +44,52 @@ export function ExpensesCalculator() {
   const handleChangeLabel = (event: any) => {
     setLabel(event.target.value);
   };
+
+  function add() {
+    updateTotalAmount((prev: any) => {
+      let item1: number = Number(prev);
+      let item2: number = Number(item.dollarAmount);
+
+      setItem({
+        expenseName: `Expense ${expenses.length + 1}`,
+        dollarAmount: 0,
+        category: 'not fun',
+      });
+
+      if (label === 'fun') {
+        let cpy = funObject;
+        cpy.fun = Number(cpy.fun) + Number(item.dollarAmount);
+        setFunObject(cpy);
+        let cpy2 = dataForGraph;
+        cpy2[0].amount_spent = Number(cpy2[0].amount_spent) + Number(cpy.fun);
+        setDataForGraph(cpy2);
+      }
+      if (label === 'not_fun') {
+        let cpy = notFunObject;
+        cpy.fun = Number(cpy.not_fun) + Number(item.dollarAmount);
+        console.log(cpy.fun);
+        setNotFunObject(cpy);
+        let cpy2 = dataForGraph;
+        cpy2[1].amount_spent = Number(cpy2[1].amount_spent) + Number(cpy.fun);
+        setDataForGraph(cpy2);
+      }
+      return item1 + item2;
+    });
+    setExpenses(() => {
+      let fun: string = 'fun';
+      return [
+        ...expenses,
+        ...[
+          {
+            expenseName: item.expenseName,
+            dollarAmount: item.dollarAmount,
+            category: fun,
+          },
+        ],
+      ];
+    });
+  }
+
   return (
     <div>
       <TextField
@@ -68,73 +123,31 @@ export function ExpensesCalculator() {
         })}
       </TextField>
 
-      <Button
-        onClick={() => {
-          updateTotalAmount((prev: any) => {
-            let item1: number = Number(prev);
-            let item2: number = Number(item.dollarAmount);
-
-            setItem({ expenseName: '', dollarAmount: 0, category: 'not fun' });
-
-            if (label === 'fun') {
-              let cpy = funObject;
-              cpy.fun = Number(cpy.fun) + Number(item.dollarAmount);
-              setFunObject(cpy);
-              let cpy2 = dataForGraph;
-              cpy2[0].amount_spent =
-                Number(cpy2[0].amount_spent) + Number(cpy.fun);
-              setDataForGraph(cpy2);
-            }
-            if (label === 'not_fun') {
-              let cpy = notFunObject;
-              cpy.fun = Number(cpy.not_fun) + Number(item.dollarAmount);
-              console.log(cpy.fun);
-              setNotFunObject(cpy);
-              let cpy2 = dataForGraph;
-              cpy2[1].amount_spent =
-                Number(cpy2[1].amount_spent) + Number(cpy.fun);
-              setDataForGraph(cpy2);
-            }
-            return item1 + item2;
-          });
-          setExpenses(() => {
-            let fun: string = 'fun';
-            return [
-              ...expenses,
-              ...[
-                {
-                  expenseName: item.expenseName,
-                  dollarAmount: item.dollarAmount,
-                  category: fun,
-                },
-              ],
-            ];
-          });
-        }}
-      >
-        ADD
-      </Button>
+      <Button onClick={() => add()}>ADD</Button>
       <Button
         onClick={() => {
           updateTotalAmount(0);
           setExpenses([]);
-          setDataForGraph(defaultPieChartState);
+          setDataForGraph(deepCopy(defaultPieChartState));
         }}
       >
         Clear
       </Button>
       {totalAmount}
-      <Paper>
+      <Paper style={{ margin: 50 }}>
         List of Expenses
-        {expenses &&
-          expenses.map((expense: Expense) => {
-            const { expenseName, dollarAmount } = expense;
-            return (
-              <div>
-                {expenseName}______{dollarAmount}
-              </div>
-            );
-          })}
+        <Paper style={{ margin: 50 }}>
+          {expenses &&
+            expenses.map((expense: Expense) => {
+              const { expenseName, dollarAmount } = expense;
+              return (
+                <div style={{ display: 'flex' }}>
+                  <div style={{ marginRight: 12 }}>{expenseName}: </div>
+                  <div>${dollarAmount}</div>
+                </div>
+              );
+            })}
+        </Paper>
         <DoughnutBudget
           labels={dataForGraph.map((item: any) => item.label)}
           dataSetLabel={'Amount Spent Per Category'}
