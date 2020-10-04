@@ -6,7 +6,7 @@ const labels = ['fun', 'not_fun'];
 
 type Expense = {
   expenseName: string;
-  dollarAmount: number;
+  dollarAmount: number | string;
   category: string;
 };
 
@@ -39,6 +39,7 @@ const styles = {
     padding: 'auto',
     'line-height': '40px',
     'border-radius': '25px',
+    'box-shadow': '0 3px 5px 2px rgba(255, 105, 135, .3)',
   },
 };
 
@@ -135,6 +136,13 @@ export function ExpensesCalculator() {
         <TextField
           placeholder={'Dollar Amount'}
           value={item.dollarAmount}
+          onClick={() => {
+            setItem({
+              expenseName: `Expense ${expenses.length + 1}`,
+              dollarAmount: '',
+              category: 'fun',
+            });
+          }}
           onChange={(e: any) => {
             let num = e.target.value;
             let cpy = JSON.parse(JSON.stringify(item));
