@@ -82,21 +82,22 @@ export function ExpensesCalculator() {
       });
 
       if (label === 'fun') {
-        let cpy = funObject;
-        cpy.fun = Number(cpy.fun) + Number(item.dollarAmount);
-        setFunObject(cpy);
-        let cpy2 = dataForGraph;
-        cpy2[0].amount_spent = Number(cpy2[0].amount_spent) + Number(cpy.fun);
-        setDataForGraph(cpy2);
+        setDataForGraph((prevObject: PieChartItem) => {
+          let cpy: PieChartItem[] = deepCopy(prevObject);
+          console.log(cpy);
+          cpy[0].amount_spent =
+            Number(cpy[0].amount_spent) + Number(item.dollarAmount);
+          return cpy;
+        });
       }
       if (label === 'not_fun') {
-        let cpy = notFunObject;
-        cpy.fun = Number(cpy.not_fun) + Number(item.dollarAmount);
-        console.log(cpy.fun);
-        setNotFunObject(cpy);
-        let cpy2 = dataForGraph;
-        cpy2[1].amount_spent = Number(cpy2[1].amount_spent) + Number(cpy.fun);
-        setDataForGraph(cpy2);
+        setDataForGraph((prevObject: PieChartItem) => {
+          let cpy: PieChartItem[] = deepCopy(prevObject);
+          console.log(cpy);
+          cpy[1].amount_spent =
+            Number(cpy[1].amount_spent) + Number(item.dollarAmount);
+          return cpy;
+        });
       }
       return item1 + item2;
     });
