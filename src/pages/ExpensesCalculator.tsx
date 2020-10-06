@@ -117,7 +117,32 @@ export function ExpensesCalculator() {
         placeholder={'Categories'}
         select
         value={expenses[index].category}
-        onChange={(e) => console.log(e)}
+        onChange={(e) => {
+          console.log(e);
+          setExpenses((prev: any) => {
+            let cpy = deepCopy(expenses);
+            cpy[index].category = e.target.value;
+            return cpy;
+          });
+          setDataForGraph((prev: any) => {
+            let cpy = deepCopy(prev);
+            if (e.target.value === 'not_fun') {
+              cpy[0].amount_spent =
+                Number(cpy[0].amount_spent) - Number(expenses[index].category);
+              cpy[1].amount_spent =
+                Number(cpy[1].amount_spent) +
+                Number(expenses[index].dollarAmount);
+              return cpy;
+            } else if (e.target.value === 'fun') {
+              cpy[1].amount_spent =
+                Number(cpy[1].amount_spent) - Number(expenses[index].category);
+              cpy[0].amount_spent =
+                Number(cpy[0].amount_spent) +
+                Number(expenses[index].dollarAmount);
+              return cpy;
+            }
+          });
+        }}
       >
         {labels.map((option) => {
           return <MenuItem value={option}>{option}</MenuItem>;
