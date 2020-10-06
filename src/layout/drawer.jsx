@@ -20,6 +20,10 @@ const useStyles = makeStyles({
   fullList: {
     width: 'auto',
   },
+
+  link: {
+    textDecoration: 'none',
+  },
 });
 export const DrawerMenu = (props) => {
   const classes = useStyles();
@@ -34,7 +38,7 @@ export const DrawerMenu = (props) => {
       onKeyDown={() => props.toggleDrawer()}
     >
       <List>
-        <Link to={'/todo'}>
+        <Link to={'/todo'} className={classes.link}>
           <ListItem button key={'ToDo'}>
             <ListItemIcon>
               <FaIcons.FaCheckSquare />
@@ -42,7 +46,7 @@ export const DrawerMenu = (props) => {
             <ListItemText primary={'ToDo'} />
           </ListItem>
         </Link>
-        <Link to={'/budget'}>
+        <Link to={'/budget'} className={classes.link}>
           <ListItem button key={'Budget'}>
             <ListItemIcon>
               <FaIcons.FaMoneyBill />
@@ -50,12 +54,12 @@ export const DrawerMenu = (props) => {
             <ListItemText primary={'Budget'} />
           </ListItem>
         </Link>
-        <Link to={'/calculator'}>
+        <Link to={'/calculator'} className={classes.link}>
           <ListItem button key={'Expenses'}>
             <ListItemIcon>
               <FaIcons.FaChartLine />
             </ListItemIcon>
-            <ListItemText primary={'Budget'} />
+            <ListItemText primary={'Expenses'} />
           </ListItem>
         </Link>
       </List>
