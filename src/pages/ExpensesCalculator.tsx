@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { DoughnutBudget } from '../components/charts/DoughnutBudget';
 import * as MdIcons from 'react-icons/md';
+import { styles } from './styles/styles';
 
 const labels = ['fun', 'not_fun'];
 
@@ -118,7 +119,7 @@ export function ExpensesCalculator() {
         select
         value={expenses[index].category}
         onChange={(e) => {
-          console.log(e);
+          console.log(e.target.value);
           setExpenses((prev: any) => {
             let cpy = deepCopy(expenses);
             cpy[index].category = e.target.value;
@@ -128,17 +129,21 @@ export function ExpensesCalculator() {
             let cpy = deepCopy(prev);
             if (e.target.value === 'not_fun') {
               cpy[0].amount_spent =
-                Number(cpy[0].amount_spent) - Number(expenses[index].category);
+                Number(cpy[0].amount_spent) -
+                Number(expenses[index].dollarAmount);
               cpy[1].amount_spent =
                 Number(cpy[1].amount_spent) +
                 Number(expenses[index].dollarAmount);
+              console.log(cpy);
               return cpy;
             } else if (e.target.value === 'fun') {
               cpy[1].amount_spent =
-                Number(cpy[1].amount_spent) - Number(expenses[index].category);
+                Number(cpy[1].amount_spent) -
+                Number(expenses[index].dollarAmount);
               cpy[0].amount_spent =
                 Number(cpy[0].amount_spent) +
                 Number(expenses[index].dollarAmount);
+              console.log(cpy);
               return cpy;
             }
           });
@@ -282,30 +287,3 @@ export function ExpensesCalculator() {
     </>
   );
 }
-const styles = {
-  static: {
-    width: 50,
-    height: 40,
-    'background-color': 'black',
-    color: 'yellow',
-    'text-align': 'center',
-    'vertical-align': 'center',
-    'line-height': '40px',
-    'border-radius': '25px',
-  },
-
-  onHover: {
-    width: 50,
-    height: 40,
-    'background-color': 'yellow',
-    color: 'black',
-    'text-align': 'center',
-    'justify-content': 'center',
-    'vertical-align': 'center',
-    cursor: 'pointer',
-    padding: 'auto',
-    'line-height': '40px',
-    'border-radius': '25px',
-    'box-shadow': '0 3px 5px 2px rgba(255, 105, 135, .3)',
-  },
-};
