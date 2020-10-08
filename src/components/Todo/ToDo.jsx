@@ -82,7 +82,14 @@ export const ToDo = () => {
         </div>
       </Paper>
 
-      <div style={{ display: 'flex' }}>
+      <div
+        style={{
+          display: 'flex',
+          'flex-wrap': 'wrap',
+          justifyContent: 'center',
+          margin: 'auto',
+        }}
+      >
         {todos.map((todo, index) => (
           <div key={todo.id ? todo.id : index} style={styles.todo}>
             <ToDoCard

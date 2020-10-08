@@ -45,9 +45,7 @@ export function ExpensesCalculator() {
     { label: 'not_fun', amount_spent: 0 },
   ]);
   const [label, setLabel] = useState<string>('fun');
-  const handleChangeLabel = (event: any) => {
-    setLabel(event.target.value);
-  };
+  const handleChangeLabel = (event: any) => setLabel(event.target.value);
 
   function add() {
     updateTotalAmount((prev: any) => {
@@ -93,9 +91,13 @@ export function ExpensesCalculator() {
   }
 
   const [hover, setHover] = useState(false);
-  function toggleHover() {
-    setHover(!hover);
-  }
+  const toggleHover = () => setHover(!hover);
+
+  const [hoverClearBtn, setHoverClearBtn] = useState(false);
+  const toggleHoverClearBtn = () => setHoverClearBtn(!hoverClearBtn);
+
+  const [hoverItem, setHoverItem] = useState(false);
+  const toggleHoverItem = () => setHoverItem(!hoverItem);
 
   function selectCategory() {
     return (
@@ -158,7 +160,11 @@ export function ExpensesCalculator() {
 
   return (
     <>
-      <div style={{ display: 'flex', margin: '5%' }}>
+      <div
+        style={hover ? styles.hoverInputFields : styles.inputFields}
+        onMouseEnter={toggleHover}
+        onMouseLeave={toggleHover}
+      >
         <TextField
           placeholder={'Expense Name'}
           value={item.expenseName}
@@ -168,7 +174,9 @@ export function ExpensesCalculator() {
             cpy.expenseName = name;
             setItem(cpy);
           }}
+          style={styles.sideMargins}
         />
+
         <TextField
           placeholder={'Dollar Amount'}
           value={item.dollarAmount}
@@ -179,6 +187,7 @@ export function ExpensesCalculator() {
               category: '',
             });
           }}
+          style={styles.sideMargins}
           onChange={(e: any) => {
             let num = e.target.value;
             let cpy = JSON.parse(JSON.stringify(item));
@@ -189,11 +198,13 @@ export function ExpensesCalculator() {
         />
 
         {selectCategory()}
-        <Button onClick={() => add()}>ADD</Button>
+        <Button onClick={() => add()} style={styles.sideMargins}>
+          ADD
+        </Button>
         <div
-          style={hover ? styles.onHover : styles.static}
-          onMouseEnter={toggleHover}
-          onMouseLeave={toggleHover}
+          style={hoverClearBtn ? styles.onHover : styles.static}
+          onMouseEnter={toggleHoverClearBtn}
+          onMouseLeave={toggleHoverClearBtn}
           onClick={() => {
             updateTotalAmount(0);
             setExpenses([]);
@@ -210,14 +221,16 @@ export function ExpensesCalculator() {
         <div style={{ marginTop: 10, marginLeft: 25 }}>{totalAmount}</div>
       </div>
 
-      <Paper style={{ margin: 50 }}>
-        List of Expenses
-        <Paper style={{ margin: 50 }}>
+      <Paper style={{ margin: 50, display: 'flex', padding: 20 }}>
+        List of Expenses:
+        <Paper style={{ margin: 50, width: '35%', padding: 15 }}>
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
               const { expenseName, dollarAmount, category } = expense;
               return (
                 <div
+                  onMouseEnter={toggleHoverItem}
+                  onMouseLeave={toggleHoverItem}
                   style={{
                     display: 'flex',
                     alignContent: 'center',
@@ -226,63 +239,69 @@ export function ExpensesCalculator() {
                 >
                   <div style={{ marginRight: 12 }}>{expenseName}: </div>
                   <div>${dollarAmount}</div>
-                  {selectItemCategory(index)}
-                  <div>{'___________ ' + index}</div>
-                  <IconButton
-                    size={'small'}
-                    onClick={() => {
-                      console.log(expenses, expenses.length);
-                      console.log('REMOVE: ' + index);
-                      setExpenses((prev: Expense[]) => {
-                        //remove object from an array
-                        return prev.filter(
-                          (expense1: Expense) =>
-                            expense1.expenseName != expense.expenseName
-                        );
-                      });
-                      updateTotalAmount((prevTotal: number) => {
-                        return prevTotal - Number(expense.dollarAmount);
-                      });
-                      console.log(dataForGraph);
-                      if (expenses[index].category === 'fun') {
-                        console.log('delete fun item');
-                        setDataForGraph((prevDataforGraph: any) => {
-                          let cpy = deepCopy(prevDataforGraph);
-                          cpy[0].amount_spent =
-                            Number(cpy[0].amount_spent) -
-                            Number(expenses[index].dollarAmount);
-                          return cpy;
+                  <div style={{ marginLeft: 10 }}>
+                    {selectItemCategory(index)}
+                  </div>
+
+                  {hoverItem && (
+                    <IconButton
+                      size={'small'}
+                      onClick={() => {
+                        console.log(expenses, expenses.length);
+                        console.log('REMOVE: ' + index);
+                        setExpenses((prev: Expense[]) => {
+                          //remove object from an array
+                          return prev.filter(
+                            (expense1: Expense) =>
+                              expense1.expenseName != expense.expenseName
+                          );
                         });
-                      } else if (expenses[index].category === 'not_fun') {
-                        console.log('delete not_fun item');
-                        setDataForGraph((prevDataforGraph: any) => {
-                          let cpy = deepCopy(prevDataforGraph);
-                          cpy[1].amount_spent =
-                            Number(cpy[1].amount_spent) -
-                            Number(expenses[index].dollarAmount);
-                          return cpy;
+                        updateTotalAmount((prevTotal: number) => {
+                          return prevTotal - Number(expense.dollarAmount);
                         });
-                      }
-                    }}
-                  >
-                    <MdIcons.MdClear />
-                  </IconButton>
+                        console.log(dataForGraph);
+                        if (expenses[index].category === 'fun') {
+                          console.log('delete fun item');
+                          setDataForGraph((prevDataforGraph: any) => {
+                            let cpy = deepCopy(prevDataforGraph);
+                            cpy[0].amount_spent =
+                              Number(cpy[0].amount_spent) -
+                              Number(expenses[index].dollarAmount);
+                            return cpy;
+                          });
+                        } else if (expenses[index].category === 'not_fun') {
+                          console.log('delete not_fun item');
+                          setDataForGraph((prevDataforGraph: any) => {
+                            let cpy = deepCopy(prevDataforGraph);
+                            cpy[1].amount_spent =
+                              Number(cpy[1].amount_spent) -
+                              Number(expenses[index].dollarAmount);
+                            return cpy;
+                          });
+                        }
+                      }}
+                    >
+                      <MdIcons.MdClear />
+                    </IconButton>
+                  )}
                 </div>
               );
             })}
         </Paper>
-        <DoughnutBudget
-          labels={dataForGraph.map((item: any) => item.label)}
-          dataSetLabel={'Amount Spent Per Category'}
-          dollarAmounts={dataForGraph.map((item: any) => item.amount_spent)}
-          itemColor={dataForGraph.map((item: any) => {
-            if (item.label === 'fun') {
-              return 'rgb(255, 255, 0)';
-            } else {
-              return 'rgb(0, 0, 0)';
-            }
-          })}
-        />
+        <Paper style={{ margin: 50, width: 250, height: 130 }}>
+          <DoughnutBudget
+            labels={dataForGraph.map((item: any) => item.label)}
+            dataSetLabel={'Amount Spent Per Category'}
+            dollarAmounts={dataForGraph.map((item: any) => item.amount_spent)}
+            itemColor={dataForGraph.map((item: any) => {
+              if (item.label === 'fun') {
+                return 'rgb(255, 255, 0)';
+              } else {
+                return 'rgb(0, 0, 0)';
+              }
+            })}
+          />
+        </Paper>
       </Paper>
     </>
   );

@@ -24,4 +24,27 @@ export const styles = {
     'border-radius': '25px',
     'box-shadow': '0 3px 5px 2px rgba(255, 105, 135, .3)',
   },
+  sideMargins: {
+    marginRight: 5,
+    marginLeft: 5,
+  },
+  inputFields: {
+    display: 'flex',
+    'background-color': 'rgba(0, 123, 0, 0.3)',
+    margin: '5%',
+    height: 75,
+    'border-radius': '25px',
+    width: '50%',
+    'align-items': 'center',
+  },
+  hoverInputFields: {
+    display: 'flex',
+    margin: '5%',
+    'background-color': 'rgba(0, 0, 0, 0.3)',
+    'border-radius': '25px',
+    width: '50%',
+    height: 75,
+    'line-height': 75,
+    'align-items': 'center',
+  },
 };
