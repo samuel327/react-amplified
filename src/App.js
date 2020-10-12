@@ -12,7 +12,7 @@ import * as budget from './mockData/budgets.json';
 import { ToDo } from './components/Todo/ToDo';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ExpensesCalculator } from './pages/ExpensesCalculator';
+import { ExpensesCalculator } from './pages/Expenses/ExpensesCalculator';
 Amplify.configure(awsExports);
 
 const App = () => {

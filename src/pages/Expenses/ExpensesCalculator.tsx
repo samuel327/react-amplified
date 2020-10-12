@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   IconButton,
@@ -6,26 +6,13 @@ import {
   Paper,
   TextField,
 } from '@material-ui/core';
-import { DoughnutBudget } from '../components/charts/DoughnutBudget';
+import { DoughnutBudget } from '../../components/charts/DoughnutBudget';
 import * as MdIcons from 'react-icons/md';
-import { styles } from './styles/styles';
+import { styles } from '../styles/styles';
 import  cloneDeep from "lodash/cloneDeep"
+import { Expense, PieChartItem } from './interfaces';
 
 const labels = ['fun', 'not_fun'];
-
-interface Expense  {
-  expenseName: string;
-  dollarAmount: number | string;
-  category: string;
-  hover: boolean; 
-};
-
-interface PieChartItem  {
-  label: string;
-  amount_spent: number;
-};
-
-
 
 const defaultPieChartState: PieChartItem[] = [
   { label: 'fun', amount_spent: 0 },
@@ -60,46 +47,51 @@ export function ExpensesCalculator() {
   const handleChangeLabel = (event: any) => setLabel(event.target.value);
 
   function add() {
-    if (item.dollarAmount !== 0 && item.dollarAmount !== '') {
+    console.log(item.dollarAmount, typeof item.dollarAmount)
+    let dl = Number(item.dollarAmount)
+    if (typeof dl === "number") {
+      if (dl !== 0  && !isNaN(dl)) {
       
-      updateTotalAmount((prev: any) => {
-        let item1: number = Number(prev);
-        let item2: number = Number(item.dollarAmount);
-  
-        setItem(defaultItem);
-  
-        if (label === 'fun') {
-          setDataForGraph((prevObject: PieChartItem) => {
-            let cpy: PieChartItem[] = deepCopy(prevObject);
-            cpy[0].amount_spent =
-              Number(cpy[0].amount_spent) + Number(item.dollarAmount);
-            return cpy;
-          });
-        }
-        if (label === 'not_fun') {
-          setDataForGraph((prevObject: PieChartItem) => {
-            let cpy: PieChartItem[] = deepCopy(prevObject);
-            cpy[1].amount_spent =
-              Number(cpy[1].amount_spent) + Number(item.dollarAmount);
-            return cpy;
-          });
-        }
-        return item1 + item2;
-      });
-      setExpenses(() => {
-        return [
-          ...expenses,
-          ...[
-            {
-              expenseName: item.expenseName,
-              dollarAmount: item.dollarAmount,
-              category: label,
-              hover: item.hover
-            },
-          ],
-        ];
-      });
+        updateTotalAmount((prev: any) => {
+          let item1: number = Number(prev);
+          let item2: number = Number(item.dollarAmount);
+    
+          setItem(defaultItem);
+    
+          if (label === 'fun') {
+            setDataForGraph((prevObject: PieChartItem) => {
+              let cpy: PieChartItem[] = deepCopy(prevObject);
+              cpy[0].amount_spent =
+                Number(cpy[0].amount_spent) + Number(item.dollarAmount);
+              return cpy;
+            });
+          }
+          if (label === 'not_fun') {
+            setDataForGraph((prevObject: PieChartItem) => {
+              let cpy: PieChartItem[] = deepCopy(prevObject);
+              cpy[1].amount_spent =
+                Number(cpy[1].amount_spent) + Number(item.dollarAmount);
+              return cpy;
+            });
+          }
+          return item1 + item2;
+        });
+        setExpenses(() => {
+          return [
+            ...expenses,
+            ...[
+              {
+                expenseName: item.expenseName,
+                dollarAmount: item.dollarAmount,
+                category: label,
+                hover: item.hover
+              },
+            ],
+          ];
+        });
+      }
     }
+    
     
   }
 
@@ -204,7 +196,7 @@ export function ExpensesCalculator() {
           onClick={() => {
             setItem({
               expenseName: `Expense ${expenses.length + 1}`,
-              dollarAmount: '',
+              dollarAmount: "",
               category: '',
               hover: false
             });
@@ -212,7 +204,7 @@ export function ExpensesCalculator() {
           style={styles.sideMargins}
           onChange={(e: any) => {
             let num = e.target.value;
-            let cpy = JSON.parse(JSON.stringify(item));
+            let cpy = cloneDeep(item);
             cpy.dollarAmount = num;
             cpy.category = label;
             setItem(cpy);
@@ -302,6 +294,12 @@ export function ExpensesCalculator() {
                             return cpy;
                           });
                         }
+
+                        setItem((prev: Expense) => {
+                          let cpy = cloneDeep(prev); 
+                          cpy.expenseName = `Expense ${expenses.length}`
+                          return cpy
+                        })
                       }}
                     >
                       <MdIcons.MdClear />
