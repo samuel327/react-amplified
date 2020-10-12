@@ -9,19 +9,23 @@ import {
 import { DoughnutBudget } from '../components/charts/DoughnutBudget';
 import * as MdIcons from 'react-icons/md';
 import { styles } from './styles/styles';
+import  cloneDeep from "lodash/cloneDeep"
 
 const labels = ['fun', 'not_fun'];
 
-type Expense = {
+interface Expense  {
   expenseName: string;
   dollarAmount: number | string;
   category: string;
+  hover: boolean; 
 };
 
-type PieChartItem = {
+interface PieChartItem  {
   label: string;
   amount_spent: number;
 };
+
+
 
 const defaultPieChartState: PieChartItem[] = [
   { label: 'fun', amount_spent: 0 },
@@ -38,7 +42,15 @@ export function ExpensesCalculator() {
     expenseName: `Expense ${expenses.length + 1}`,
     dollarAmount: 0,
     category: 'fun',
+    hover: false
   });
+
+  const defaultItem: Expense = {
+    expenseName: `Expense ${expenses.length + 2}`,
+    dollarAmount: 0,
+    category: 'not fun',
+    hover: false
+  }
 
   const [dataForGraph, setDataForGraph] = useState<any>([
     { label: 'fun', amount_spent: 0 },
@@ -48,46 +60,47 @@ export function ExpensesCalculator() {
   const handleChangeLabel = (event: any) => setLabel(event.target.value);
 
   function add() {
-    updateTotalAmount((prev: any) => {
-      let item1: number = Number(prev);
-      let item2: number = Number(item.dollarAmount);
-
-      setItem({
-        expenseName: `Expense ${expenses.length + 2}`,
-        dollarAmount: 0,
-        category: 'not fun',
+    if (item.dollarAmount !== 0 && item.dollarAmount !== '') {
+      
+      updateTotalAmount((prev: any) => {
+        let item1: number = Number(prev);
+        let item2: number = Number(item.dollarAmount);
+  
+        setItem(defaultItem);
+  
+        if (label === 'fun') {
+          setDataForGraph((prevObject: PieChartItem) => {
+            let cpy: PieChartItem[] = deepCopy(prevObject);
+            cpy[0].amount_spent =
+              Number(cpy[0].amount_spent) + Number(item.dollarAmount);
+            return cpy;
+          });
+        }
+        if (label === 'not_fun') {
+          setDataForGraph((prevObject: PieChartItem) => {
+            let cpy: PieChartItem[] = deepCopy(prevObject);
+            cpy[1].amount_spent =
+              Number(cpy[1].amount_spent) + Number(item.dollarAmount);
+            return cpy;
+          });
+        }
+        return item1 + item2;
       });
-
-      if (label === 'fun') {
-        setDataForGraph((prevObject: PieChartItem) => {
-          let cpy: PieChartItem[] = deepCopy(prevObject);
-          cpy[0].amount_spent =
-            Number(cpy[0].amount_spent) + Number(item.dollarAmount);
-          return cpy;
-        });
-      }
-      if (label === 'not_fun') {
-        setDataForGraph((prevObject: PieChartItem) => {
-          let cpy: PieChartItem[] = deepCopy(prevObject);
-          cpy[1].amount_spent =
-            Number(cpy[1].amount_spent) + Number(item.dollarAmount);
-          return cpy;
-        });
-      }
-      return item1 + item2;
-    });
-    setExpenses(() => {
-      return [
-        ...expenses,
-        ...[
-          {
-            expenseName: item.expenseName,
-            dollarAmount: item.dollarAmount,
-            category: label,
-          },
-        ],
-      ];
-    });
+      setExpenses(() => {
+        return [
+          ...expenses,
+          ...[
+            {
+              expenseName: item.expenseName,
+              dollarAmount: item.dollarAmount,
+              category: label,
+              hover: item.hover
+            },
+          ],
+        ];
+      });
+    }
+    
   }
 
   const [hover, setHover] = useState(false);
@@ -96,8 +109,16 @@ export function ExpensesCalculator() {
   const [hoverClearBtn, setHoverClearBtn] = useState(false);
   const toggleHoverClearBtn = () => setHoverClearBtn(!hoverClearBtn);
 
-  const [hoverItem, setHoverItem] = useState(false);
-  const toggleHoverItem = () => setHoverItem(!hoverItem);
+ 
+  const toggleHoverItem = (location: number) => {
+    setExpenses((prev: Expense[]) => {
+      let cpy: Expense[] = cloneDeep(prev); 
+      console.log(cpy)
+      cpy[location].hover = !cpy[location].hover; 
+      console.log(cpy)
+      return cpy; 
+    })
+  };
 
   function selectCategory() {
     return (
@@ -185,6 +206,7 @@ export function ExpensesCalculator() {
               expenseName: `Expense ${expenses.length + 1}`,
               dollarAmount: '',
               category: '',
+              hover: false
             });
           }}
           style={styles.sideMargins}
@@ -213,12 +235,13 @@ export function ExpensesCalculator() {
               expenseName: `Expense 1`,
               dollarAmount: 0,
               category: '',
+              hover: false
             });
           }}
         >
           Clear
         </div>
-        <div style={{ marginTop: 10, marginLeft: 25 }}>{totalAmount}</div>
+        <div style={{ marginTop: 10, marginLeft: 25 }}>${totalAmount}</div>
       </div>
 
       <Paper style={{ margin: 50, display: 'flex', padding: 20 }}>
@@ -226,11 +249,11 @@ export function ExpensesCalculator() {
         <Paper style={{ margin: 50, width: '35%', padding: 15 }}>
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
-              const { expenseName, dollarAmount, category } = expense;
+              const { expenseName, dollarAmount, category, hover } = expense;
               return (
                 <div
-                  onMouseEnter={toggleHoverItem}
-                  onMouseLeave={toggleHoverItem}
+                  onMouseEnter={() => toggleHoverItem(index)}
+                  onMouseLeave={() => toggleHoverItem(index)}
                   style={{
                     display: 'flex',
                     alignContent: 'center',
@@ -243,7 +266,7 @@ export function ExpensesCalculator() {
                     {selectItemCategory(index)}
                   </div>
 
-                  {hoverItem && (
+                  {hover && (
                     <IconButton
                       size={'small'}
                       onClick={() => {
@@ -301,6 +324,10 @@ export function ExpensesCalculator() {
               }
             })}
           />
+        </Paper>
+        <Paper style={{ margin: 50, width: 250, height: 130 }}>
+          Percentage
+          {(Number(dataForGraph[0].amount_spent) / Number(totalAmount)) * 100}
         </Paper>
       </Paper>
     </>
