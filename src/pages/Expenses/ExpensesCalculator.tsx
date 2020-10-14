@@ -354,9 +354,9 @@ export function ExpensesCalculator() {
             dollarAmounts={dataForGraph.map((item: any) => item.amount_spent)}
             itemColor={dataForGraph.map((item: any) => {
               if (item.label === 'fun') {
-                return 'rgb(255, 255, 0)';
+                return 'rgb(132, 195, 193)';
               } else {
-                return 'rgb(0, 0, 0)';
+                return 'rgb(46, 139, 87)';
               }
             })}
           />

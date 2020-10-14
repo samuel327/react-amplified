@@ -27,7 +27,7 @@ export const NavBar = (props) => {
       <AppBar
         position="static"
         style={{
-          background: 'linear-gradient(45deg, #000000 30%, #FFFF33 90%)',
+          background: 'linear-gradient(45deg, #84C3C1 30%, #2E8B57 90%)',
 
           color: 'white',
 
