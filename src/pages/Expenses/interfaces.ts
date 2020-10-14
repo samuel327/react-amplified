@@ -10,3 +10,9 @@ export interface PieChartItem {
   label: string;
   amount_spent: number;
 }
+
+export interface Member {
+  ID: number;
+  name: string;
+  amount_spent: number;
+}

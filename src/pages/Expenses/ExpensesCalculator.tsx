@@ -9,22 +9,16 @@ import {
 import { DoughnutBudget } from '../../components/charts/DoughnutBudget';
 import * as MdIcons from 'react-icons/md';
 import { styles } from '../styles/styles';
-import  cloneDeep from "lodash/cloneDeep"
-import { Expense, PieChartItem } from './interfaces';
+import cloneDeep from 'lodash/cloneDeep';
+import { Expense, Member, PieChartItem } from './interfaces';
 import { getMembers } from '../../rds_apis/apiCalls';
-
-interface Member {
-  ID: number, 
-  name: string
-}
+import { HorizontalBar } from 'react-chartjs-2';
 
 const labels = ['fun', 'not_fun'];
-
 const defaultPieChartState: PieChartItem[] = [
   { label: 'fun', amount_spent: 0 },
   { label: 'not_fun', amount_spent: 0 },
 ];
-
 function deepCopy(arg: object) {
   return JSON.parse(JSON.stringify(arg));
 }
@@ -36,7 +30,7 @@ export function ExpensesCalculator() {
     dollarAmount: 0,
     category: 'fun',
     member: '',
-    hover: false
+    hover: false,
   });
 
   const defaultItem: Expense = {
@@ -44,41 +38,37 @@ export function ExpensesCalculator() {
     dollarAmount: 0,
     category: 'not fun',
     member: '',
-    hover: false
-  }
+    hover: false,
+  };
 
   const [dataForGraph, setDataForGraph] = useState<any>([
     { label: 'fun', amount_spent: 0 },
     { label: 'not_fun', amount_spent: 0 },
   ]);
-  const [label, setLabel] = useState<string>('fun');
-  const handleChangeLabel = (event: any) => setLabel(event.target.value);
 
-  const [members, setMembers] = useState<any[]>([])
+  const [members, setMembers] = useState<Member[]>([]);
 
-
-  useEffect(()=> {
+  useEffect(() => {
     const getData = async () => {
       let res = await getMembers();
-      console.log(res)
-      setMembers(res) 
-    }
-    getData()
-  }, [])
+      console.log(res);
+      setMembers(res);
+    };
+    getData();
+  }, []);
 
   function add() {
-    console.log(item.dollarAmount, typeof item.dollarAmount)
-    let dl = Number(item.dollarAmount)
-    if (typeof dl === "number") {
-      if (dl !== 0  && !isNaN(dl)) {
-      
+    console.log(item.dollarAmount, typeof item.dollarAmount);
+    let dl = Number(item.dollarAmount);
+    if (typeof dl === 'number') {
+      if (dl !== 0 && !isNaN(dl) && item.member !== '') {
         updateTotalAmount((prev: any) => {
           let item1: number = Number(prev);
           let item2: number = Number(item.dollarAmount);
-    
+
           setItem(defaultItem);
-    
-          if (label === 'fun') {
+
+          if (item.category === 'fun') {
             setDataForGraph((prevObject: PieChartItem) => {
               let cpy: PieChartItem[] = deepCopy(prevObject);
               cpy[0].amount_spent =
@@ -86,7 +76,7 @@ export function ExpensesCalculator() {
               return cpy;
             });
           }
-          if (label === 'not_fun') {
+          if (item.category === 'not_fun') {
             setDataForGraph((prevObject: PieChartItem) => {
               let cpy: PieChartItem[] = deepCopy(prevObject);
               cpy[1].amount_spent =
@@ -103,17 +93,25 @@ export function ExpensesCalculator() {
               {
                 expenseName: item.expenseName,
                 dollarAmount: item.dollarAmount,
-                category: label,
+                category: item.category,
                 member: item.member,
-                hover: item.hover
+                hover: item.hover,
               },
             ],
           ];
         });
       }
+
+      setMembers((prev: Member[]) => {
+        let cpy = cloneDeep(prev);
+        cpy.map((member: Member) => {
+          if (member.name === item.member) {
+            member.amount_spent = Number(item.dollarAmount);
+          }
+        });
+        return cpy;
+      });
     }
-    
-    
   }
 
   const [hover, setHover] = useState(false);
@@ -122,15 +120,12 @@ export function ExpensesCalculator() {
   const [hoverClearBtn, setHoverClearBtn] = useState(false);
   const toggleHoverClearBtn = () => setHoverClearBtn(!hoverClearBtn);
 
- 
   const toggleHoverItem = (location: number) => {
     setExpenses((prev: Expense[]) => {
-      let cpy: Expense[] = cloneDeep(prev); 
-      console.log(cpy)
-      cpy[location].hover = !cpy[location].hover; 
-      console.log(cpy)
-      return cpy; 
-    })
+      let cpy: Expense[] = cloneDeep(prev);
+      cpy[location].hover = !cpy[location].hover;
+      return cpy;
+    });
   };
 
   function selectCategory() {
@@ -138,8 +133,14 @@ export function ExpensesCalculator() {
       <TextField
         placeholder={'Categories'}
         select
-        value={label}
-        onChange={handleChangeLabel}
+        value={item.category}
+        onChange={(e) => {
+          setItem((prev: Expense) => {
+            let cpy = cloneDeep(prev);
+            cpy.category = e.target.value;
+            return cpy;
+          });
+        }}
       >
         {labels.map((option) => {
           return <MenuItem value={option}>{option}</MenuItem>;
@@ -215,12 +216,10 @@ export function ExpensesCalculator() {
           placeholder={'Dollar Amount'}
           value={item.dollarAmount}
           onClick={() => {
-            setItem({
-              expenseName: `Expense ${expenses.length + 1}`,
-              dollarAmount: "",
-              category: '',
-              member: '',
-              hover: false
+            setItem((prev: Expense) => {
+              let cpy = cloneDeep(prev);
+              cpy.dollarAmount = '';
+              return cpy;
             });
           }}
           style={styles.sideMargins}
@@ -228,27 +227,25 @@ export function ExpensesCalculator() {
             let num = e.target.value;
             let cpy = cloneDeep(item);
             cpy.dollarAmount = num;
-            cpy.category = label;
             setItem(cpy);
           }}
         />
         <TextField
-        placeholder={'Categories'}
-        select
-        value={item.member}
-        onChange={(e: any) => {
-          setItem((prev: any) => {
-            let cpy = cloneDeep(prev)
-            cpy.member = e.target.value
-            return cpy
-          })
-          
-        }}
-      >
-        {members.map((member: Member)=> {
-          return <MenuItem value={member.name}>{member.name}</MenuItem>;
-        })}
-      </TextField>
+          placeholder={'Categories'}
+          select
+          value={item.member}
+          onChange={(e: any) => {
+            setItem((prev: any) => {
+              let cpy = cloneDeep(prev);
+              cpy.member = e.target.value;
+              return cpy;
+            });
+          }}
+        >
+          {members.map((member: Member) => {
+            return <MenuItem value={member.name}>{member.name}</MenuItem>;
+          })}
+        </TextField>
 
         {selectCategory()}
         <Button onClick={() => add()} style={styles.sideMargins}>
@@ -267,7 +264,7 @@ export function ExpensesCalculator() {
               dollarAmount: 0,
               category: '',
               member: '',
-              hover: false
+              hover: false,
             });
           }}
         >
@@ -304,9 +301,11 @@ export function ExpensesCalculator() {
                       onClick={() => {
                         console.log(expenses, expenses.length);
                         console.log('REMOVE: ' + index);
+                        let dlrAmt = expenses[index].dollarAmount;
+                        console.log(dlrAmt);
                         setExpenses((prev: Expense[]) => {
                           //remove object from an array
-                          let cpy = cloneDeep(prev)
+                          let cpy = cloneDeep(prev);
                           return cpy.filter(
                             (expense1: Expense) =>
                               expense1.expenseName !== expense.expenseName
@@ -321,8 +320,7 @@ export function ExpensesCalculator() {
                           setDataForGraph((prevDataforGraph: any) => {
                             let cpy = deepCopy(prevDataforGraph);
                             cpy[0].amount_spent =
-                              Number(cpy[0].amount_spent) -
-                              Number(expenses[index].dollarAmount);
+                              Number(cpy[0].amount_spent) - Number(dlrAmt);
                             return cpy;
                           });
                         } else if (expenses[index].category === 'not_fun') {
@@ -330,17 +328,16 @@ export function ExpensesCalculator() {
                           setDataForGraph((prevDataforGraph: any) => {
                             let cpy = deepCopy(prevDataforGraph);
                             cpy[1].amount_spent =
-                              Number(cpy[1].amount_spent) -
-                              Number(expenses[index].dollarAmount);
+                              Number(cpy[1].amount_spent) - Number(dlrAmt);
                             return cpy;
                           });
                         }
 
                         setItem((prev: Expense) => {
-                          let cpy = cloneDeep(prev); 
-                          cpy.expenseName = `Expense ${expenses.length}`
-                          return cpy
-                        })
+                          let cpy = cloneDeep(prev);
+                          cpy.expenseName = `Expense ${expenses.length}`;
+                          return cpy;
+                        });
                       }}
                     >
                       <MdIcons.MdClear />
@@ -364,11 +361,57 @@ export function ExpensesCalculator() {
             })}
           />
         </Paper>
-        <Paper style={{ margin: 50, width: 250, height: 130 }}>
-          Percentage
-          {(Number(dataForGraph[0].amount_spent) / Number(totalAmount)) * 100}
+        <Paper>
+          <HorizontalBar
+            data={{
+              labels: members.map((member: Member) => member.name),
+              datasets: [
+                {
+                  label: 'Who Spends More',
+                  backgroundColor: 'rgba(255,99,132,0.2)',
+                  borderColor: 'rgba(255,99,132,1)',
+                  borderWidth: 1,
+                  hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                  hoverBorderColor: 'rgba(255,99,132,1)',
+                  data: members.map((member: Member) => member.amount_spent),
+                },
+              ],
+            }}
+            options={{
+              scales: {
+                xAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  },
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  },
+                ],
+              },
+            }}
+          />
         </Paper>
       </Paper>
     </>
   );
 }
+const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: [65, 59, 80, 81, 56, 55, 40],
+    },
+  ],
+};
