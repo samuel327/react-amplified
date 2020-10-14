@@ -3,3 +3,11 @@ type Todo @model {
   name: String!
   description: String
 }
+
+type Expense @model {
+  id: ID!
+  expenseName: String!
+  dollarAmount: Float!
+  category: String!
+  member: String!
+}

@@ -13,6 +13,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Expense, Member, PieChartItem } from './interfaces';
 import { getMembers } from '../../rds_apis/apiCalls';
 import { HorizontalBar } from 'react-chartjs-2';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listExpenses } from '../../graphql/queries';
+import { createExpense, createTodo } from '../../graphql/mutations';
 
 const labels = ['fun', 'not_fun'];
 const defaultPieChartState: PieChartItem[] = [
@@ -54,14 +57,69 @@ export function ExpensesCalculator() {
       console.log(res);
       setMembers(res);
     };
+
+    const getExpenses = async () => {
+      try {
+        const expensesData: any = await API.graphql(
+          graphqlOperation(listExpenses)
+        );
+        let expensesList = expensesData.data.listExpenses.items;
+        expensesList = expensesList.map((expense: any) => {
+          return { ...expense, ...{ hover: false } };
+        });
+        console.log('EXPENSES: ', expensesList);
+        totalAmtsForGraph(expensesList);
+        setExpenses(expensesList);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     getData();
+    getExpenses();
   }, []);
 
-  function add() {
+  function totalAmtsForGraph(expensesArray: Expense[]) {
+    const reducer = (accumulator: any, currentValue: any) => {
+      return accumulator + currentValue;
+    };
+    let x = expensesArray
+      .map((expense: Expense) => {
+        if (expense.category === 'fun') {
+          return expense.dollarAmount;
+        }
+      })
+      .reduce(reducer);
+    console.log('X', x);
+
+    setDataForGraph((prevObject: PieChartItem) => {
+      let cpy: PieChartItem[] = deepCopy(prevObject);
+      cpy[0].amount_spent = Number(cpy[0].amount_spent) + Number(x);
+      return cpy;
+    });
+
+    return;
+  }
+
+  async function saveExpense() {
+    try {
+      console.log(item);
+      delete item.hover;
+      let res = await API.graphql(
+        graphqlOperation(createExpense, { input: item })
+      );
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function add() {
     console.log(item.dollarAmount, typeof item.dollarAmount);
     let dl = Number(item.dollarAmount);
     if (typeof dl === 'number') {
       if (dl !== 0 && !isNaN(dl) && item.member !== '') {
+        await saveExpense();
         updateTotalAmount((prev: any) => {
           let item1: number = Number(prev);
           let item2: number = Number(item.dollarAmount);
@@ -401,17 +459,3 @@ export function ExpensesCalculator() {
     </>
   );
 }
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [65, 59, 80, 81, 56, 55, 40],
-    },
-  ],
-};

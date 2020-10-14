@@ -3,7 +3,7 @@ export interface Expense {
   dollarAmount: number | string;
   category: string;
   member: string;
-  hover: boolean;
+  hover?: boolean;
 }
 
 export interface Member {
