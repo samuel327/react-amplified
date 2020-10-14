@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   IconButton,
@@ -11,6 +11,12 @@ import * as MdIcons from 'react-icons/md';
 import { styles } from '../styles/styles';
 import  cloneDeep from "lodash/cloneDeep"
 import { Expense, PieChartItem } from './interfaces';
+import { getMembers } from '../../rds_apis/apiCalls';
+
+interface Member {
+  ID: number, 
+  name: string
+}
 
 const labels = ['fun', 'not_fun'];
 
@@ -29,6 +35,7 @@ export function ExpensesCalculator() {
     expenseName: `Expense ${expenses.length + 1}`,
     dollarAmount: 0,
     category: 'fun',
+    member: '',
     hover: false
   });
 
@@ -36,6 +43,7 @@ export function ExpensesCalculator() {
     expenseName: `Expense ${expenses.length + 2}`,
     dollarAmount: 0,
     category: 'not fun',
+    member: '',
     hover: false
   }
 
@@ -45,6 +53,18 @@ export function ExpensesCalculator() {
   ]);
   const [label, setLabel] = useState<string>('fun');
   const handleChangeLabel = (event: any) => setLabel(event.target.value);
+
+  const [members, setMembers] = useState<any[]>([])
+
+
+  useEffect(()=> {
+    const getData = async () => {
+      let res = await getMembers();
+      console.log(res)
+      setMembers(res) 
+    }
+    getData()
+  }, [])
 
   function add() {
     console.log(item.dollarAmount, typeof item.dollarAmount)
@@ -84,6 +104,7 @@ export function ExpensesCalculator() {
                 expenseName: item.expenseName,
                 dollarAmount: item.dollarAmount,
                 category: label,
+                member: item.member,
                 hover: item.hover
               },
             ],
@@ -198,6 +219,7 @@ export function ExpensesCalculator() {
               expenseName: `Expense ${expenses.length + 1}`,
               dollarAmount: "",
               category: '',
+              member: '',
               hover: false
             });
           }}
@@ -210,6 +232,23 @@ export function ExpensesCalculator() {
             setItem(cpy);
           }}
         />
+        <TextField
+        placeholder={'Categories'}
+        select
+        value={item.member}
+        onChange={(e: any) => {
+          setItem((prev: any) => {
+            let cpy = cloneDeep(prev)
+            cpy.member = e.target.value
+            return cpy
+          })
+          
+        }}
+      >
+        {members.map((member: Member)=> {
+          return <MenuItem value={member.name}>{member.name}</MenuItem>;
+        })}
+      </TextField>
 
         {selectCategory()}
         <Button onClick={() => add()} style={styles.sideMargins}>
@@ -227,6 +266,7 @@ export function ExpensesCalculator() {
               expenseName: `Expense 1`,
               dollarAmount: 0,
               category: '',
+              member: '',
               hover: false
             });
           }}
@@ -241,7 +281,7 @@ export function ExpensesCalculator() {
         <Paper style={{ margin: 50, width: '35%', padding: 15 }}>
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
-              const { expenseName, dollarAmount, category, hover } = expense;
+              const { expenseName, dollarAmount, hover } = expense;
               return (
                 <div
                   onMouseEnter={() => toggleHoverItem(index)}
@@ -266,9 +306,10 @@ export function ExpensesCalculator() {
                         console.log('REMOVE: ' + index);
                         setExpenses((prev: Expense[]) => {
                           //remove object from an array
-                          return prev.filter(
+                          let cpy = cloneDeep(prev)
+                          return cpy.filter(
                             (expense1: Expense) =>
-                              expense1.expenseName != expense.expenseName
+                              expense1.expenseName !== expense.expenseName
                           );
                         });
                         updateTotalAmount((prevTotal: number) => {

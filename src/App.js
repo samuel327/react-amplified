@@ -1,8 +1,6 @@
 /* src/App.js */
-import React, { useEffect, useState } from 'react';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import { createTodo, deleteTodo } from './graphql/mutations';
-import { listTodos } from './graphql/queries';
+import React, { useState } from 'react';
+import Amplify from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import { NavBar } from './layout/toolBar';
