@@ -6,13 +6,13 @@ export interface Expense {
   hover: boolean;
 }
 
-export interface PieChartItem {
-  label: string;
-  amount_spent: number;
-}
-
 export interface Member {
   ID: number;
   name: string;
+  amount_spent: number;
+}
+
+export interface PieChartItem {
+  label: string;
   amount_spent: number;
 }

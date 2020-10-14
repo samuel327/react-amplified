@@ -205,7 +205,7 @@ export function ExpensesCalculator() {
           value={item.expenseName}
           onChange={(e: any) => {
             let name = e.target.value;
-            let cpy = JSON.parse(JSON.stringify(item));
+            let cpy = cloneDeep(item);
             cpy.expenseName = name;
             setItem(cpy);
           }}
