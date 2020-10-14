@@ -16,6 +16,7 @@ import { HorizontalBar } from 'react-chartjs-2';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listExpenses } from '../../graphql/queries';
 import { createExpense, deleteExpense } from '../../graphql/mutations';
+import BarGraph from './components/BarGraph';
 
 const labels = ['fun', 'not_fun'];
 const defaultPieChartState: PieChartItem[] = [
@@ -374,24 +375,14 @@ export function ExpensesCalculator() {
                   {hover && (
                     <IconButton
                       size={'small'}
-                      onClick={() => {
+                      onClick={async () => {
                         console.log(expenses, expenses.length);
                         console.log('REMOVE: ' + index);
                         let dlrAmt = expenses[index].dollarAmount;
                         console.log(dlrAmt);
-                        deleteThis(expenses[index]);
-                        // setExpenses((prev: Expense[]) => {
-                        //   //remove object from an array
-                        //   let cpy = cloneDeep(prev);
-                        //   return cpy.filter(
-                        //     (expense1: Expense) =>
-                        //       expense1.expenseName !== expense.expenseName
-                        //   );
-                        // });
-
-                        // updateTotalAmount((prevTotal: number) => {
-                        //   return prevTotal - Number(expense.dollarAmount);
-                        // });
+                        console.log('BEFORE: ', expenses);
+                        await deleteThis(expenses[index]);
+                        console.log('AFTER: ', expenses);
                         console.log(dataForGraph);
                         if (expenses[index].category === 'fun') {
                           console.log('delete fun item');
@@ -439,42 +430,7 @@ export function ExpensesCalculator() {
             })}
           />
         </Paper>
-        <Paper>
-          <HorizontalBar
-            data={{
-              labels: members.map((member: Member) => member.name),
-              datasets: [
-                {
-                  label: 'Who Spends More',
-                  backgroundColor: 'rgba(255,99,132,0.2)',
-                  borderColor: 'rgba(255,99,132,1)',
-                  borderWidth: 1,
-                  hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                  hoverBorderColor: 'rgba(255,99,132,1)',
-                  data: members.map((member: Member) => member.amount_spent),
-                },
-              ],
-            }}
-            options={{
-              scales: {
-                xAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-              },
-            }}
-          />
-        </Paper>
+        <BarGraph members={members} />
       </Paper>
     </>
   );
