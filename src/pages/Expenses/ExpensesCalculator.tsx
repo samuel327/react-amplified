@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import {
   Button,
   IconButton,
@@ -15,7 +15,7 @@ import { getMembers } from '../../rds_apis/apiCalls';
 import { HorizontalBar } from 'react-chartjs-2';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listExpenses } from '../../graphql/queries';
-import { createExpense, createTodo } from '../../graphql/mutations';
+import { createExpense, deleteExpense } from '../../graphql/mutations';
 
 const labels = ['fun', 'not_fun'];
 const defaultPieChartState: PieChartItem[] = [
@@ -58,26 +58,26 @@ export function ExpensesCalculator() {
       setMembers(res);
     };
 
-    const getExpenses = async () => {
-      try {
-        const expensesData: any = await API.graphql(
-          graphqlOperation(listExpenses)
-        );
-        let expensesList = expensesData.data.listExpenses.items;
-        expensesList = expensesList.map((expense: any) => {
-          return { ...expense, ...{ hover: false } };
-        });
-        console.log('EXPENSES: ', expensesList);
-        totalAmtsForGraph(expensesList);
-        setExpenses(expensesList);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     getData();
     getExpenses();
   }, []);
+
+  const getExpenses = async () => {
+    try {
+      const expensesData: any = await API.graphql(
+        graphqlOperation(listExpenses)
+      );
+      let expensesList = expensesData.data.listExpenses.items;
+      expensesList = expensesList.map((expense: any) => {
+        return { ...expense, ...{ hover: false } };
+      });
+      console.log('EXPENSES: ', expensesList);
+      totalAmtsForGraph(expensesList);
+      setExpenses(expensesList);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   function totalAmtsForGraph(expensesArray: Expense[]) {
     const reducer = (accumulator: any, currentValue: any) => {
@@ -98,6 +98,10 @@ export function ExpensesCalculator() {
       return cpy;
     });
 
+    let total: number = expensesArray
+      .map((expense: Expense) => Number(expense.dollarAmount))
+      .reduce(reducer);
+    updateTotalAmount(total);
     return;
   }
 
@@ -112,6 +116,20 @@ export function ExpensesCalculator() {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  async function deleteThis(expenseItem: any) {
+    console.log(expenseItem);
+    try {
+      await API.graphql(
+        graphqlOperation(deleteExpense, {
+          input: { id: expenseItem.id },
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    await getExpenses();
   }
 
   async function add() {
@@ -361,17 +379,19 @@ export function ExpensesCalculator() {
                         console.log('REMOVE: ' + index);
                         let dlrAmt = expenses[index].dollarAmount;
                         console.log(dlrAmt);
-                        setExpenses((prev: Expense[]) => {
-                          //remove object from an array
-                          let cpy = cloneDeep(prev);
-                          return cpy.filter(
-                            (expense1: Expense) =>
-                              expense1.expenseName !== expense.expenseName
-                          );
-                        });
-                        updateTotalAmount((prevTotal: number) => {
-                          return prevTotal - Number(expense.dollarAmount);
-                        });
+                        deleteThis(expenses[index]);
+                        // setExpenses((prev: Expense[]) => {
+                        //   //remove object from an array
+                        //   let cpy = cloneDeep(prev);
+                        //   return cpy.filter(
+                        //     (expense1: Expense) =>
+                        //       expense1.expenseName !== expense.expenseName
+                        //   );
+                        // });
+
+                        // updateTotalAmount((prevTotal: number) => {
+                        //   return prevTotal - Number(expense.dollarAmount);
+                        // });
                         console.log(dataForGraph);
                         if (expenses[index].category === 'fun') {
                           console.log('delete fun item');
