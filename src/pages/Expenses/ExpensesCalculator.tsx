@@ -251,8 +251,8 @@ export function ExpensesCalculator() {
         <Button onClick={() => add()} style={styles.sideMargins}>
           ADD
         </Button>
-        <div
-          style={hoverClearBtn ? styles.onHover : styles.static}
+        <Button
+          style={hoverClearBtn ? {} : {}}
           onMouseEnter={toggleHoverClearBtn}
           onMouseLeave={toggleHoverClearBtn}
           onClick={() => {
@@ -268,8 +268,8 @@ export function ExpensesCalculator() {
             });
           }}
         >
-          Clear
-        </div>
+          CLEAR
+        </Button>
         <div style={{ marginTop: 10, marginLeft: 25 }}>${totalAmount}</div>
       </div>
 
