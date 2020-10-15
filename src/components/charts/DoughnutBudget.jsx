@@ -32,8 +32,7 @@ export class DoughnutBudget extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('UPDATED');
-    console.log(this.props.dollarAmounts);
+
     this.state.chart.data.datasets[0].data = this.props.dollarAmounts;
     this.state.chart.update();
   }
