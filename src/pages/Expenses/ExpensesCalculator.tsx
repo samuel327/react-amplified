@@ -196,6 +196,7 @@ export function ExpensesCalculator() {
         />
         <TextField
           placeholder={'Categories'}
+          style={styles.sideMargins}
           select
           value={item.member}
           onChange={(e: any) => {
