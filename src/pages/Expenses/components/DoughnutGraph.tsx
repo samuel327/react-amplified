@@ -81,13 +81,14 @@ function DoughnutGraph(props: any) {
     datasets: [
       {
         data: graphData.map((item: any) => item.amount_spent),
+        backgroundColor: ['rgba(255,99,132,0.2)', 'rgba(255,99,132,0.8)'],
       },
     ],
   };
 
   return (
     <div>
-      <Paper style={{ margin: 50, width: 250, height: 130 }}>
+      <Paper>
         <Doughnut data={data} />
       </Paper>
     </div>

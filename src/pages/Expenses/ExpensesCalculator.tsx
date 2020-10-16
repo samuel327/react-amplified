@@ -51,7 +51,6 @@ export function ExpensesCalculator() {
       let res = await getMembers();
       setMembers(res);
     };
-
     getData();
     getExpenses();
   }, []);
@@ -65,8 +64,6 @@ export function ExpensesCalculator() {
       expensesList = expensesList.map((expense: any) => {
         return { ...expense, ...{ hover: false } };
       });
-      console.log('CALLED', expensesList);
-
       setExpenses(expensesList);
       totalAmtsForGraph(expensesList);
     } catch (e) {
@@ -161,7 +158,7 @@ export function ExpensesCalculator() {
   }
 
   return (
-    <>
+    <div style={{ backgroundColor: 'rgba(102, 255, 178, .1)' }}>
       <div
         style={hover ? styles.hoverInputFields : styles.inputFields}
         onMouseEnter={toggleHover}
@@ -239,9 +236,19 @@ export function ExpensesCalculator() {
         <div style={{ marginTop: 10, marginLeft: 25 }}>${totalAmount}</div>
       </div>
 
-      <Paper style={{ margin: 50, display: 'flex', padding: 20 }}>
-        List of Expenses:
-        <Paper style={{ margin: 50, width: '35%', padding: 15 }}>
+      <div
+        style={{
+          display: 'flex',
+          flex: 'wrap',
+          height: '500px',
+
+          padding: 20,
+          justifyContent: 'center',
+          alignContent: 'center',
+        }}
+      >
+        <div>List of Expenses:</div>
+        <Paper style={{ margin: 50, width: '25%', padding: 15, height: 280 }}>
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
               const { expenseName, dollarAmount, hover } = expense;
@@ -257,28 +264,32 @@ export function ExpensesCalculator() {
                   <div>${dollarAmount}</div>
                   <div style={{ marginLeft: 10 }}></div>
                   {expenses[index].category}
-                  {
-                    <IconButton
-                      size={'small'}
-                      onClick={async () => {
-                        await deleteThis(expenses[index]);
-                        setItem((prev: Expense) => {
-                          let cpy = cloneDeep(defaultItem);
-                          cpy.expenseName = `Expense ${expenses.length}`;
-                          return cpy;
-                        });
-                      }}
-                    >
-                      <MdIcons.MdClear />
-                    </IconButton>
-                  }
+                  <IconButton
+                    size={'small'}
+                    onClick={async () => {
+                      await deleteThis(expenses[index]);
+                      setItem((prev: Expense) => {
+                        let cpy = cloneDeep(defaultItem);
+                        cpy.expenseName = `Expense ${expenses.length}`;
+                        return cpy;
+                      });
+                    }}
+                  >
+                    <MdIcons.MdClear />
+                  </IconButton>
                 </div>
               );
             })}
         </Paper>
-        <DoughnutGraph expenses={expenses} />
-        <BarGraph members={members} />
-      </Paper>
-    </>
+        <div style={{ margin: 50 }}>
+          <div style={{ width: 250, height: 130, margin: 15 }}>
+            <DoughnutGraph expenses={expenses} />
+          </div>
+          <div style={{ width: 250, height: 130, margin: 15 }}>
+            <BarGraph members={members} expenses={expenses} />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
