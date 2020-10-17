@@ -60,6 +60,7 @@ const defaultItem = (expenses: Expense[]) => {
     expenseName: `Expense ${expenses.length + 1}`,
     dollarAmount: 0,
     category: '',
+    subCategory: '',
     member: '',
     hover: false,
   };
@@ -214,9 +215,20 @@ export function ExpensesCalculator() {
           }}
         />
 
-        <TextField select style={{ width: 150 }}>
+        <TextField
+          select
+          style={{ width: 150 }}
+          value={item.subCategory}
+          onChange={(e) => {
+            setItem((prev: Expense) => {
+              let cpy = cloneDeep(prev);
+              cpy.subCategory = e.target.value;
+              return cpy;
+            });
+          }}
+        >
           {categories.map((category: any) => {
-            return <MenuItem>{category.type}</MenuItem>;
+            return <MenuItem value={category.type}>{category.type}</MenuItem>;
           })}
         </TextField>
         <TextField
@@ -259,6 +271,7 @@ export function ExpensesCalculator() {
               expenseName: `Expense 1`,
               dollarAmount: 0,
               category: '',
+              subCategory: '',
               member: '',
               hover: false,
             });
@@ -284,7 +297,7 @@ export function ExpensesCalculator() {
         >
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
-              const { expenseName, dollarAmount, hover } = expense;
+              const { expenseName, dollarAmount, hover, subCategory } = expense;
               return (
                 <div
                   style={{
@@ -293,7 +306,8 @@ export function ExpensesCalculator() {
                     alignItems: 'center',
                   }}
                 >
-                  <div>{expenseName}: </div>
+                  {subCategory}
+                  {/* <div>{expenseName}: </div> */}
                   <div>${dollarAmount}</div>
                   <div></div>
                   {/* {expenses[index].category} */}

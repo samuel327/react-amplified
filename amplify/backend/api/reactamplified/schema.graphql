@@ -9,5 +9,6 @@ type Expense @model {
   expenseName: String!
   dollarAmount: Float!
   category: String!
+  subCategory: String!
   member: String!
 }

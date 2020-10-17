@@ -2,6 +2,7 @@ export interface Expense {
   expenseName: string;
   dollarAmount: number | string;
   category: string;
+  subCategory: string;
   member: string;
   hover?: boolean;
 }

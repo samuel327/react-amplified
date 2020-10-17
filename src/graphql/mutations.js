@@ -53,6 +53,7 @@ export const createExpense = /* GraphQL */ `
       expenseName
       dollarAmount
       category
+      subCategory
       member
       createdAt
       updatedAt
@@ -69,6 +70,7 @@ export const updateExpense = /* GraphQL */ `
       expenseName
       dollarAmount
       category
+      subCategory
       member
       createdAt
       updatedAt
@@ -85,6 +87,7 @@ export const deleteExpense = /* GraphQL */ `
       expenseName
       dollarAmount
       category
+      subCategory
       member
       createdAt
       updatedAt

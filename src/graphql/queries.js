@@ -37,6 +37,7 @@ export const getExpense = /* GraphQL */ `
       expenseName
       dollarAmount
       category
+      subCategory
       member
       createdAt
       updatedAt
@@ -55,6 +56,7 @@ export const listExpenses = /* GraphQL */ `
         expenseName
         dollarAmount
         category
+        subCategory
         member
         createdAt
         updatedAt
