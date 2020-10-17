@@ -288,7 +288,15 @@ export function ExpensesCalculator() {
               );
             })}
         </Paper>
-        <div style={{ margin: 50 }}>
+        <div
+          style={{
+            margin: 50,
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
+          }}
+        >
           <div style={{ width: 250, height: 130, margin: 15 }}>
             <DoughnutGraph expenses={expenses} />
           </div>
