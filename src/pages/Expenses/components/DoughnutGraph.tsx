@@ -6,7 +6,7 @@ import { Expense, PieChartItem } from '../interfaces';
 
 const defaultPieChartState: PieChartItem[] = [
   { label: 'fun', amount_spent: 0 },
-  { label: 'not_fun', amount_spent: 0 },
+  { label: 'not fun', amount_spent: 0 },
 ];
 
 function DoughnutGraph(props: any) {
@@ -53,7 +53,7 @@ function DoughnutGraph(props: any) {
     }
 
     let y: any = expensesArray.map((expense: Expense) => {
-      if (expense.category === 'not_fun') {
+      if (expense.category === 'not fun') {
         console.log(expense.dollarAmount);
         if (Number(expense.dollarAmount)) {
           return Number(expense.dollarAmount);

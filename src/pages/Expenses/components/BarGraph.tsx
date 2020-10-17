@@ -15,6 +15,11 @@ const defaultMemberState: Member[] = [
     name: '',
     amount_spent: 0,
   },
+  {
+    ID: 0,
+    name: '',
+    amount_spent: 0,
+  },
 ];
 
 function BarGraph(props: any) {
@@ -79,6 +84,29 @@ function BarGraph(props: any) {
         let cpy: Member[] = cloneDeep(prevObject);
         cpy[1].amount_spent = Number(yy);
         cpy[1].name = 'Elizabeth';
+        console.log(cpy);
+        return cpy;
+      });
+    }
+
+    let z: any = expensesArray.map((expense: Expense) => {
+      if (expense.member === 'joint') {
+        console.log(expense.dollarAmount);
+        if (Number(expense.dollarAmount)) {
+          return Number(expense.dollarAmount);
+        } else {
+          return 0;
+        }
+      } else return 0;
+    });
+
+    let zz = z.reduce(reducer);
+
+    if (Number(zz) >= 0) {
+      setMembers((prevObject: Member[]) => {
+        let cpy: Member[] = cloneDeep(prevObject);
+        cpy[2].amount_spent = Number(zz);
+        cpy[2].name = 'Joint';
         console.log(cpy);
         return cpy;
       });

@@ -17,7 +17,7 @@ import { createExpense, deleteExpense } from '../../graphql/mutations';
 import BarGraph from './components/BarGraph';
 import DoughnutGraph from './components/DoughnutGraph';
 
-const labels = ['fun', 'not_fun'];
+const labels = ['fun', 'not fun'];
 
 function selectCategory(setItem: Function, item: Expense) {
   return (
@@ -111,7 +111,6 @@ export function ExpensesCalculator() {
   }
 
   async function deleteThis(expenseItem: any) {
-    console.log(expenseItem);
     try {
       await API.graphql(
         graphqlOperation(deleteExpense, {
@@ -125,6 +124,7 @@ export function ExpensesCalculator() {
   }
 
   async function add() {
+    console.log(item);
     let dl = Number(item.dollarAmount);
     if (typeof dl === 'number') {
       if (
@@ -209,6 +209,7 @@ export function ExpensesCalculator() {
           {members.map((member: Member) => {
             return <MenuItem value={member.name}>{member.name}</MenuItem>;
           })}
+          <MenuItem value={'joint'}>Joint</MenuItem>
         </TextField>
 
         {selectCategory(setItem, item)}
@@ -221,7 +222,6 @@ export function ExpensesCalculator() {
           onMouseLeave={toggleHoverClearBtn}
           onClick={() => {
             updateTotalAmount(0);
-            // setExpenses([]);
             Promise.all(
               expenses.map((expense: Expense) => {
                 deleteThis(expense);
