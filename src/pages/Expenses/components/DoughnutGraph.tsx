@@ -1,7 +1,7 @@
 import { Paper } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import { Expense, PieChartItem } from '../interfaces';
 
 const defaultPieChartState: PieChartItem[] = [
@@ -87,11 +87,9 @@ function DoughnutGraph(props: any) {
   };
 
   return (
-    <div>
-      <Paper>
-        <Doughnut data={data} />
-      </Paper>
-    </div>
+    <Paper>
+      <Pie data={data} />
+    </Paper>
   );
 }
 

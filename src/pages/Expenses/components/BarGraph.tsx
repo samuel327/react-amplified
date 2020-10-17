@@ -87,7 +87,7 @@ function BarGraph(props: any) {
   }
   return (
     <div>
-      <Paper style={{ width: 250, height: 130 }}>
+      <Paper>
         <HorizontalBar
           data={{
             labels: members1.map((member: Member) => member.name),
