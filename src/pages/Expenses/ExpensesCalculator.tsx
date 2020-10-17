@@ -10,7 +10,7 @@ import * as MdIcons from 'react-icons/md';
 import { styles } from '../styles/styles';
 import cloneDeep from 'lodash/cloneDeep';
 import { Expense, Member, PieChartItem } from './interfaces';
-import { getMembers } from '../../rds_apis/apiCalls';
+import { getCategories, getMembers } from '../../rds_apis/apiCalls';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listExpenses } from '../../graphql/queries';
 import { createExpense, deleteExpense } from '../../graphql/mutations';
@@ -40,6 +40,21 @@ function selectCategory(setItem: Function, item: Expense) {
   );
 }
 
+function selectLineItemCategory(
+  expenses: Expense[],
+  setExpenses: Function,
+  index: number
+) {
+  console.log(expenses[index]);
+  return (
+    <TextField select value={expenses[index].category}>
+      {labels.map((option) => {
+        return <MenuItem value={option}>{option}</MenuItem>;
+      })}
+    </TextField>
+  );
+}
+
 const defaultItem = (expenses: Expense[]) => {
   let item: Expense = {
     expenseName: `Expense ${expenses.length + 1}`,
@@ -57,6 +72,7 @@ export function ExpensesCalculator() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [item, setItem] = useState<Expense>(defaultItem(expenses));
   const [members, setMembers] = useState<Member[]>([]);
+  const [categories, setCategories] = useState<object[]>([]);
   const [hover, setHover] = useState(false);
   const toggleHover = () => setHover(!hover);
   const [hoverClearBtn, setHoverClearBtn] = useState(false);
@@ -64,8 +80,11 @@ export function ExpensesCalculator() {
 
   useEffect(() => {
     const getData = async () => {
-      let res = await getMembers();
-      setMembers(res);
+      let mems = await getMembers();
+      let cats = await getCategories();
+      console.log(cats);
+      setMembers(mems);
+      setCategories(cats);
     };
     getData();
     getExpenses();
@@ -194,6 +213,12 @@ export function ExpensesCalculator() {
             setItem(cpy);
           }}
         />
+
+        <TextField select style={{ width: 150 }}>
+          {categories.map((category: any) => {
+            return <MenuItem>{category.type}</MenuItem>;
+          })}
+        </TextField>
         <TextField
           style={styles.sideMargins}
           select
@@ -271,7 +296,8 @@ export function ExpensesCalculator() {
                   <div>{expenseName}: </div>
                   <div>${dollarAmount}</div>
                   <div></div>
-                  {expenses[index].category}
+                  {/* {expenses[index].category} */}
+                  {selectLineItemCategory(expenses, setExpenses, index)}
                   <IconButton
                     size={'small'}
                     onClick={async () => {
