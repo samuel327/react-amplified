@@ -16,6 +16,7 @@ import { listExpenses } from '../../graphql/queries';
 import { createExpense, deleteExpense } from '../../graphql/mutations';
 import BarGraph from './components/BarGraph';
 import DoughnutGraph from './components/DoughnutGraph';
+import { VerticalBarGraph } from './components/VerticalBarGraph';
 
 const labels = ['fun', 'not fun'];
 
@@ -307,7 +308,7 @@ export function ExpensesCalculator() {
                   }}
                 >
                   {subCategory}
-                  {/* <div>{expenseName}: </div> */}
+                  <div>{expenseName}: </div>
                   <div>${dollarAmount}</div>
                   <div></div>
                   {/* {expenses[index].category} */}
@@ -344,6 +345,9 @@ export function ExpensesCalculator() {
             </div>
             <div style={{ marginTop: 15 }}>
               <BarGraph members={members} expenses={expenses} />
+            </div>
+            <div style={{ marginTop: 15 }}>
+              <VerticalBarGraph expenses={expenses} />
             </div>
           </div>
           <div style={{ width: '30%' }}>
