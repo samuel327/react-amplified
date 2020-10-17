@@ -25,7 +25,7 @@ export function ExpensesCalculator() {
   const [item, setItem] = useState<Expense>({
     expenseName: `Expense ${expenses.length + 1}`,
     dollarAmount: 0,
-    category: 'fun',
+    category: '',
     member: '',
     hover: false,
   });
@@ -144,7 +144,7 @@ export function ExpensesCalculator() {
   function selectCategory() {
     return (
       <TextField
-        placeholder={'Categories'}
+        style={{ width: 100 }}
         select
         value={item.category}
         onChange={(e) => {
@@ -200,7 +200,6 @@ export function ExpensesCalculator() {
           }}
         />
         <TextField
-          placeholder={'Categories'}
           style={styles.sideMargins}
           select
           value={item.member}

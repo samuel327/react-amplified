@@ -27,6 +27,7 @@ export const styles = {
   sideMargins: {
     marginRight: 5,
     marginLeft: 5,
+    width: 200,
   },
   inputFields: {
     display: 'flex',
