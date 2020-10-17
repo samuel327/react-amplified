@@ -50,4 +50,18 @@ export const styles = {
     'justify-content': 'center',
     'align-items': 'center',
   },
+
+  circle: {
+    'border-radius': '50%',
+    width: '50%',
+    height: 130,
+    margin: 15,
+    backgroundColor: 'rgb(221,160,221, 0.3)',
+    justifyContent: 'center',
+
+    display: 'flex',
+    alignContent: 'center',
+    alignItems: 'center',
+    fontSize: 32,
+  },
 };

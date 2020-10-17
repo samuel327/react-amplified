@@ -22,7 +22,7 @@ const labels = ['fun', 'not fun'];
 function selectCategory(setItem: Function, item: Expense) {
   return (
     <TextField
-      style={{ width: 100 }}
+      style={{ width: 150 }}
       select
       value={item.category}
       onChange={(e) => {
@@ -241,7 +241,6 @@ export function ExpensesCalculator() {
         >
           CLEAR
         </Button>
-        <div style={{ marginTop: 10, marginLeft: 25 }}>${totalAmount}</div>
       </div>
 
       <div
@@ -295,6 +294,19 @@ export function ExpensesCalculator() {
           </div>
           <div style={{ width: 250, height: 130, margin: 15 }}>
             <BarGraph members={members} expenses={expenses} />
+          </div>
+          <div style={styles.circle}>
+            {/* <Paper
+              style={{
+                justifyContent: 'center',
+                height: '100%',
+                display: 'flex',
+                alignContent: 'center',
+                alignItems: 'center',
+                fontSize: 32,
+              }}
+            > */}
+            ${totalAmount}
           </div>
         </div>
       </div>

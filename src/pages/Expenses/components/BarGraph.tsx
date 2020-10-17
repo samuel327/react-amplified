@@ -4,6 +4,23 @@ import React, { useEffect, useState } from 'react';
 import { HorizontalBar } from 'react-chartjs-2';
 import { Expense, Member, PieChartItem } from '../interfaces';
 
+function producedDefaultMemberStateJson(memberArray: Member[]) {
+  if (memberArray && memberArray.length > 0) {
+    let len = memberArray.length;
+    let defaultMemberArray = [];
+    for (var i = 0; i <= len; i++) {
+      defaultMemberArray.push({
+        ID: i,
+        name: '',
+        amount_spent: 0,
+      });
+    }
+    return defaultMemberArray;
+  } else {
+    return [];
+  }
+}
+
 const defaultMemberState: Member[] = [
   {
     ID: 0,
@@ -25,12 +42,15 @@ const defaultMemberState: Member[] = [
 function BarGraph(props: any) {
   const { members, expenses } = props;
 
-  const [members1, setMembers] = useState<Member[]>([]);
+  const [members1, setMembers] = useState<Member[]>(
+    producedDefaultMemberStateJson(members)
+  );
 
   useEffect(() => {
     if (expenses && expenses.length > 0) {
       totalAmtsForGraph(expenses);
     } else if (expenses.length === 0) {
+      console.log(members);
       setMembers(cloneDeep(defaultMemberState));
     }
   }, [expenses]);
