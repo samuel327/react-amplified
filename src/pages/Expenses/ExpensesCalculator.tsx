@@ -19,30 +19,46 @@ import DoughnutGraph from './components/DoughnutGraph';
 
 const labels = ['fun', 'not_fun'];
 
-export function ExpensesCalculator() {
-  const [totalAmount, updateTotalAmount] = useState<number>(0);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [item, setItem] = useState<Expense>({
+function selectCategory(setItem: Function, item: Expense) {
+  return (
+    <TextField
+      style={{ width: 100 }}
+      select
+      value={item.category}
+      onChange={(e) => {
+        setItem((prev: Expense) => {
+          let cpy = cloneDeep(prev);
+          cpy.category = e.target.value;
+          return cpy;
+        });
+      }}
+    >
+      {labels.map((option) => {
+        return <MenuItem value={option}>{option}</MenuItem>;
+      })}
+    </TextField>
+  );
+}
+
+const defaultItem = (expenses: Expense[]) => {
+  let item: Expense = {
     expenseName: `Expense ${expenses.length + 1}`,
     dollarAmount: 0,
     category: '',
     member: '',
     hover: false,
-  });
-
-  const defaultItem: Expense = {
-    expenseName: `Expense ${expenses.length + 2}`,
-    dollarAmount: 0,
-    category: 'not fun',
-    member: '',
-    hover: false,
   };
 
-  const [members, setMembers] = useState<Member[]>([]);
+  return item;
+};
 
+export function ExpensesCalculator() {
+  const [totalAmount, updateTotalAmount] = useState<number>(0);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [item, setItem] = useState<Expense>(defaultItem(expenses));
+  const [members, setMembers] = useState<Member[]>([]);
   const [hover, setHover] = useState(false);
   const toggleHover = () => setHover(!hover);
-
   const [hoverClearBtn, setHoverClearBtn] = useState(false);
   const toggleHoverClearBtn = () => setHoverClearBtn(!hoverClearBtn);
 
@@ -122,7 +138,7 @@ export function ExpensesCalculator() {
           let item1: number = Number(prev);
           let item2: number = Number(item.dollarAmount);
 
-          setItem(defaultItem);
+          setItem(defaultItem(expenses));
 
           return item1 + item2;
         });
@@ -139,27 +155,6 @@ export function ExpensesCalculator() {
         return cpy;
       });
     }
-  }
-
-  function selectCategory() {
-    return (
-      <TextField
-        style={{ width: 100 }}
-        select
-        value={item.category}
-        onChange={(e) => {
-          setItem((prev: Expense) => {
-            let cpy = cloneDeep(prev);
-            cpy.category = e.target.value;
-            return cpy;
-          });
-        }}
-      >
-        {labels.map((option) => {
-          return <MenuItem value={option}>{option}</MenuItem>;
-        })}
-      </TextField>
-    );
   }
 
   return (
@@ -216,7 +211,7 @@ export function ExpensesCalculator() {
           })}
         </TextField>
 
-        {selectCategory()}
+        {selectCategory(setItem, item)}
         <Button onClick={() => add()} style={styles.sideMargins}>
           ADD
         </Button>
@@ -226,7 +221,15 @@ export function ExpensesCalculator() {
           onMouseLeave={toggleHoverClearBtn}
           onClick={() => {
             updateTotalAmount(0);
-            setExpenses([]);
+            // setExpenses([]);
+            Promise.all(
+              expenses.map((expense: Expense) => {
+                deleteThis(expense);
+              })
+            )
+              .then((res) => console.log(res))
+              .catch((e) => console.log(e))
+              .finally(() => console.log('FINISHED DELETING EXPENSES!'));
             setItem({
               expenseName: `Expense 1`,
               dollarAmount: 0,
@@ -274,7 +277,7 @@ export function ExpensesCalculator() {
                     onClick={async () => {
                       await deleteThis(expenses[index]);
                       setItem((prev: Expense) => {
-                        let cpy = cloneDeep(defaultItem);
+                        let cpy = cloneDeep(defaultItem(expenses));
                         cpy.expenseName = `Expense ${expenses.length}`;
                         return cpy;
                       });
