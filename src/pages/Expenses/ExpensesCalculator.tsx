@@ -111,7 +111,12 @@ export function ExpensesCalculator() {
   async function add() {
     let dl = Number(item.dollarAmount);
     if (typeof dl === 'number') {
-      if (dl !== 0 && !isNaN(dl) && item.member !== '') {
+      if (
+        dl !== 0 &&
+        !isNaN(dl) &&
+        item.member !== '' &&
+        item.category !== ''
+      ) {
         await saveExpense();
         updateTotalAmount((prev: any) => {
           let item1: number = Number(prev);
