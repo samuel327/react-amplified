@@ -246,16 +246,17 @@ export function ExpensesCalculator() {
       <div
         style={{
           display: 'flex',
-          flex: 'wrap',
-          height: '500px',
-
-          padding: 20,
-          justifyContent: 'center',
-          alignContent: 'center',
+          // flex: 'wrap',
+          //height: '500px',
+          //padding: 20,
+          // justifyContent: 'center',
+          // alignContent: 'center',
         }}
       >
         <div>List of Expenses:</div>
-        <Paper style={{ margin: 50, width: '25%', padding: 15, height: 280 }}>
+        <Paper
+          style={{ width: '50%', padding: 15, height: 400, marginTop: '50px' }}
+        >
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
               const { expenseName, dollarAmount, hover } = expense;
@@ -267,9 +268,9 @@ export function ExpensesCalculator() {
                     alignItems: 'center',
                   }}
                 >
-                  <div style={{ marginRight: 12 }}>{expenseName}: </div>
+                  <div>{expenseName}: </div>
                   <div>${dollarAmount}</div>
-                  <div style={{ marginLeft: 10 }}></div>
+                  <div></div>
                   {expenses[index].category}
                   <IconButton
                     size={'small'}
@@ -290,31 +291,23 @@ export function ExpensesCalculator() {
         </Paper>
         <div
           style={{
-            margin: 50,
             justifyContent: 'center',
             alignContent: 'center',
             alignItems: 'center',
-            textAlign: 'center',
+            display: 'flex',
+            width: '100%',
           }}
         >
-          <div style={{ width: 250, height: 130, margin: 15 }}>
-            <DoughnutGraph expenses={expenses} />
+          <div style={{ width: '50%' }}>
+            <div style={{ marginTop: 50, marginBottom: 15 }}>
+              <DoughnutGraph expenses={expenses} />
+            </div>
+            <div style={{ marginTop: 15 }}>
+              <BarGraph members={members} expenses={expenses} />
+            </div>
           </div>
-          <div style={{ width: 250, height: 130, margin: 15 }}>
-            <BarGraph members={members} expenses={expenses} />
-          </div>
-          <div style={styles.circle}>
-            {/* <Paper
-              style={{
-                justifyContent: 'center',
-                height: '100%',
-                display: 'flex',
-                alignContent: 'center',
-                alignItems: 'center',
-                fontSize: 32,
-              }}
-            > */}
-            ${totalAmount}
+          <div style={{ width: '30%' }}>
+            <div style={styles.circle}>${totalAmount}</div>
           </div>
         </div>
       </div>

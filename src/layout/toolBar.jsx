@@ -46,7 +46,7 @@ export const NavBar = (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            React-Amplified
+            Dashboard
           </Typography>
           <Button style={{ color: 'black' }}>Login</Button>
         </Toolbar>

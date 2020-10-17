@@ -56,7 +56,7 @@ export const styles = {
     width: '50%',
     height: 130,
     margin: 'auto',
-    backgroundColor: 'rgb(221,160,221, 0.3)',
+    backgroundColor: 'rgb(221,160,221, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',

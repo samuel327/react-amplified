@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ExpensesCalculator } from './pages/Expenses/ExpensesCalculator';
 import { Stocks } from './pages/Stocks/Stocks';
+
 Amplify.configure(awsExports);
 
 const App = () => {
@@ -18,7 +19,7 @@ const App = () => {
   const toggleDrawer = () => setSideMenuState(!sideMenuState);
 
   return (
-    <>
+    <div className={'App'}>
       <Router>
         <NavBar toggleDrawer={toggleDrawer} />
         <DrawerMenu sideMenuState={sideMenuState} toggleDrawer={toggleDrawer} />
@@ -30,7 +31,7 @@ const App = () => {
           <Route path="/stocks" component={Stocks} />
         </Switch>
       </Router>
-    </>
+    </div>
   );
 };
 
