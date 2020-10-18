@@ -87,7 +87,7 @@ function DoughnutGraph(props: any) {
   };
 
   return (
-    <Paper>
+    <Paper elevation={props.elevation}>
       <Pie data={data} />
     </Paper>
   );

@@ -135,7 +135,7 @@ function BarGraph(props: any) {
   }
   return (
     <div>
-      <Paper>
+      <Paper elevation={props.elevation}>
         <HorizontalBar
           data={{
             labels: members1.map((member: Member) => member.name),

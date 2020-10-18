@@ -77,8 +77,18 @@ export function ExpensesCalculator() {
   const [categories, setCategories] = useState<object[]>([]);
   const [hover, setHover] = useState(false);
   const toggleHover = () => setHover(!hover);
-  const [hoverClearBtn, setHoverClearBtn] = useState(false);
-  const toggleHoverClearBtn = () => setHoverClearBtn(!hoverClearBtn);
+  const [hoverClearBtn, setHoverClearBtn] = useState({
+    graph1: false,
+    graph2: false,
+    graph3: false,
+    listOfExpenses: false,
+  });
+  const toggleHoverClearBtn = (key: string) =>
+    setHoverClearBtn((prevObject: any) => {
+      let cpy: any = cloneDeep(prevObject);
+      cpy[key] = !cpy[key];
+      return cpy;
+    });
 
   useEffect(() => {
     const getData = async () => {
@@ -118,7 +128,7 @@ export function ExpensesCalculator() {
       .map((expense: Expense) => Number(expense.dollarAmount))
       .reduce(reducer);
     console.log(total);
-    updateTotalAmount(total);
+    updateTotalAmount(Math.round(total));
     return;
   }
 
@@ -161,7 +171,7 @@ export function ExpensesCalculator() {
 
           setItem(defaultItem(expenses));
 
-          return item1 + item2;
+          return Math.round(item1 + item2);
         });
         await getExpenses();
       }
@@ -255,9 +265,6 @@ export function ExpensesCalculator() {
           ADD
         </Button>
         <Button
-          style={hoverClearBtn ? {} : {}}
-          onMouseEnter={toggleHoverClearBtn}
-          onMouseLeave={toggleHoverClearBtn}
           onClick={() => {
             updateTotalAmount(0);
             Promise.all(
@@ -295,6 +302,9 @@ export function ExpensesCalculator() {
         <div>List of Expenses:</div>
         <Paper
           style={{ width: '50%', padding: 15, height: 400, marginTop: '50px' }}
+          onMouseEnter={() => toggleHoverClearBtn('listOfExpenses')}
+          onMouseLeave={() => toggleHoverClearBtn('listOfExpenses')}
+          elevation={hoverClearBtn.listOfExpenses ? 13 : 0}
         >
           {expenses &&
             expenses.map((expense: Expense, index: number) => {
@@ -307,12 +317,12 @@ export function ExpensesCalculator() {
                     alignItems: 'center',
                   }}
                 >
-                  {subCategory}
+                  <div>{subCategory}</div>
                   <div>{expenseName}: </div>
                   <div>${dollarAmount}</div>
                   <div></div>
                   {/* {expenses[index].category} */}
-                  {selectLineItemCategory(expenses, setExpenses, index)}
+                  {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
                   <IconButton
                     size={'small'}
                     onClick={async () => {
@@ -339,20 +349,42 @@ export function ExpensesCalculator() {
             width: '100%',
           }}
         >
-          <div style={{ width: '50%' }}>
+          <div
+            style={{ width: '50%' }}
+            onMouseEnter={() => toggleHoverClearBtn('graph1')}
+            onMouseLeave={() => toggleHoverClearBtn('graph1')}
+          >
             <div style={{ marginTop: 50, marginBottom: 15 }}>
-              <DoughnutGraph expenses={expenses} />
+              <DoughnutGraph
+                expenses={expenses}
+                elevation={hoverClearBtn.graph1 ? 13 : 0}
+              />
             </div>
-            <div style={{ marginTop: 15 }}>
-              <BarGraph members={members} expenses={expenses} />
+            <div
+              style={{ marginTop: 15 }}
+              onMouseEnter={() => toggleHoverClearBtn('graph2')}
+              onMouseLeave={() => toggleHoverClearBtn('graph2')}
+            >
+              <BarGraph
+                members={members}
+                expenses={expenses}
+                elevation={hoverClearBtn.graph2 ? 13 : 0}
+              />
             </div>
-            <div style={{ marginTop: 15 }}>
-              <VerticalBarGraph expenses={expenses} />
+            <div
+              style={{ marginTop: 15 }}
+              onMouseEnter={() => toggleHoverClearBtn('graph3')}
+              onMouseLeave={() => toggleHoverClearBtn('graph3')}
+            >
+              <VerticalBarGraph
+                expenses={expenses}
+                elevation={hoverClearBtn.graph3 ? 13 : 0}
+              />
             </div>
           </div>
-          <div style={{ width: '30%' }}>
+          <Paper style={{ width: '30%' }} square variant="outlined">
             <div style={styles.circle}>${totalAmount}</div>
-          </div>
+          </Paper>
         </div>
       </div>
     </div>

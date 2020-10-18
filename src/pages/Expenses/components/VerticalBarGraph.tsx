@@ -4,6 +4,7 @@ import { Bar } from 'react-chartjs-2';
 import { Expense } from '../interfaces';
 
 interface VerticalBarGraphProps {
+  elevation: number;
   expenses: Expense[];
 }
 
@@ -15,6 +16,7 @@ export function VerticalBarGraph(props: VerticalBarGraphProps) {
     labels: expenses.map((item: Expense) => item.subCategory),
     datasets: [
       {
+        label: 'Categories',
         data: expenses.map((item: Expense) => item.dollarAmount),
         backgroundColor: ['rgba(255,99, 200,0.8)', 'rgba(255,99,132,0.8)'],
       },
@@ -24,7 +26,7 @@ export function VerticalBarGraph(props: VerticalBarGraphProps) {
   //data.datasets[0].data = arrExpenses;
   console.log(data);
   return (
-    <Paper>
+    <Paper elevation={props.elevation}>
       <Bar
         data={data}
         options={{
