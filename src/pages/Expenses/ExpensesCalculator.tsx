@@ -416,23 +416,27 @@ export function ExpensesCalculator() {
                     >
                       ${dollarAmount}
                     </Grid>
+                    <Grid item xs>
+                      {hover && (
+                        <IconButton
+                          size={'small'}
+                          onClick={async () => {
+                            await deleteThis(expenses[index]);
+                            setItem((prev: Expense) => {
+                              let cpy = cloneDeep(defaultItem(expenses));
+                              cpy.expenseName = `Expense ${expenses.length}`;
+                              return cpy;
+                            });
+                          }}
+                        >
+                          <MdIcons.MdClear />
+                        </IconButton>
+                      )}
+                    </Grid>
                   </Grid>
 
                   {/* {expenses[index].category} */}
                   {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
-                  <IconButton
-                    size={'small'}
-                    onClick={async () => {
-                      await deleteThis(expenses[index]);
-                      setItem((prev: Expense) => {
-                        let cpy = cloneDeep(defaultItem(expenses));
-                        cpy.expenseName = `Expense ${expenses.length}`;
-                        return cpy;
-                      });
-                    }}
-                  >
-                    <MdIcons.MdClear />
-                  </IconButton>
                 </div>
               );
             })}
