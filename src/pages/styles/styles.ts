@@ -66,4 +66,17 @@ export const styles = {
   lineItem: {
     margin: 12,
   },
+  onHoverLineItem: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgb(220,220,220)',
+    'border-radius': '25px',
+  },
+  inActiveLineItem: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '',
+  },
 };

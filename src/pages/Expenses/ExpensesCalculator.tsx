@@ -360,12 +360,9 @@ export function ExpensesCalculator() {
                   <Grid
                     container
                     xs
-                    style={{
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                      alignItems: 'center',
-                      backgroundColor: hover ? 'rgb(220,220,220)' : '',
-                    }}
+                    style={
+                      hover ? styles.onHoverLineItem : styles.inActiveLineItem
+                    }
                     onMouseEnter={() => toggleHoverLineItem(index)}
                     onMouseLeave={() => toggleHoverLineItem(index)}
                   >
