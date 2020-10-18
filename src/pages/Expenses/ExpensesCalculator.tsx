@@ -332,12 +332,9 @@ export function ExpensesCalculator() {
         </div>
       </div>
 
-      <div style={{ margin: 5, marginLeft: 15 }}>
-        <h2>List of Expenses:</h2>
-      </div>
       <Paper
         style={{
-          width: '80%',
+          width: '82%',
           padding: 15,
           display: 'flex',
           marginTop: 50,
@@ -372,17 +369,6 @@ export function ExpensesCalculator() {
                     onMouseEnter={() => toggleHoverLineItem(index)}
                     onMouseLeave={() => toggleHoverLineItem(index)}
                   >
-                    <Grid
-                      item
-                      xs
-                      style={{
-                        width: 20,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      {index + 1}){' '}
-                    </Grid>
                     <Grid
                       item
                       xs
@@ -441,7 +427,7 @@ export function ExpensesCalculator() {
               );
             })}
         </div>
-        <div style={{ width: '40%', marginLeft: 'auto', marginRight: 0 }}>
+        <div style={{ width: '30%', marginLeft: 'auto', marginRight: 0 }}>
           <div style={styles.circle}>${totalAmount}</div>
         </div>
       </Paper>
