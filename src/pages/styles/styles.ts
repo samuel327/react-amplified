@@ -62,4 +62,8 @@ export const styles = {
     display: 'flex',
     fontSize: 32,
   },
+
+  lineItem: {
+    margin: 12,
+  },
 };

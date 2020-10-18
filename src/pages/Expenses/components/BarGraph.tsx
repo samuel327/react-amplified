@@ -133,6 +133,7 @@ function BarGraph(props: any) {
     }
     return;
   }
+
   return (
     <div>
       <Paper elevation={props.elevation}>

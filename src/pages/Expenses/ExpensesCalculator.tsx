@@ -292,7 +292,7 @@ export function ExpensesCalculator() {
         <div
           onMouseEnter={() => toggleHoverClearBtn('graph1')}
           onMouseLeave={() => toggleHoverClearBtn('graph1')}
-          style={{ margin: 15 }}
+          style={{ margin: 15, width: 300 }}
         >
           <DoughnutGraph
             expenses={expenses}
@@ -303,19 +303,18 @@ export function ExpensesCalculator() {
         <div
           onMouseEnter={() => toggleHoverClearBtn('graph2')}
           onMouseLeave={() => toggleHoverClearBtn('graph2')}
-          style={{ margin: 15 }}
+          style={{ margin: 15, width: 300 }}
         >
           <BarGraph
             members={members}
             expenses={expenses}
             elevation={hoverClearBtn.graph2 ? 13 : 0}
-            style={{ margin: 15 }}
           />
         </div>
         <div
           onMouseEnter={() => toggleHoverClearBtn('graph3')}
           onMouseLeave={() => toggleHoverClearBtn('graph3')}
-          style={{ margin: 15 }}
+          style={{ margin: 15, width: 300 }}
         >
           <VerticalBarGraph
             expenses={expenses}
@@ -331,7 +330,7 @@ export function ExpensesCalculator() {
         style={{
           width: '80%',
           padding: 15,
-          height: 400,
+          display: 'flex',
           marginTop: 50,
           margin: 'auto',
           marginBottom: 200,
@@ -340,54 +339,47 @@ export function ExpensesCalculator() {
         onMouseLeave={() => toggleHoverClearBtn('listOfExpenses')}
         elevation={hoverClearBtn.listOfExpenses ? 13 : 0}
       >
-        {expenses &&
-          expenses.map((expense: Expense, index: number) => {
-            const { expenseName, dollarAmount, hover, subCategory } = expense;
-            return (
-              <div
-                style={{
-                  display: 'flex',
-                  alignContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <div>{subCategory}</div>
-                <div>{expenseName}: </div>
-                <div>${dollarAmount}</div>
-                <div></div>
-                {/* {expenses[index].category} */}
-                {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
-                <IconButton
-                  size={'small'}
-                  onClick={async () => {
-                    await deleteThis(expenses[index]);
-                    setItem((prev: Expense) => {
-                      let cpy = cloneDeep(defaultItem(expenses));
-                      cpy.expenseName = `Expense ${expenses.length}`;
-                      return cpy;
-                    });
+        <div>
+          {expenses &&
+            expenses.map((expense: Expense, index: number) => {
+              const { expenseName, dollarAmount, hover, subCategory } = expense;
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignContent: 'center',
+                    alignItems: 'center',
                   }}
                 >
-                  <MdIcons.MdClear />
-                </IconButton>
-              </div>
-            );
-          })}
-      </Paper>
+                  <div>{index + 1}) </div>
+                  <div style={styles.lineItem}>{subCategory}</div>
+                  <div style={styles.lineItem}>{expenseName}: </div>
+                  <div style={styles.lineItem}>${dollarAmount}</div>
+                  <div style={styles.lineItem}></div>
 
-      {/* <div
-        style={{
-          justifyContent: 'center',
-          alignContent: 'center',
-          alignItems: 'center',
-          display: 'flex',
-          width: '100%',
-        }}
-      >
-        <div style={{ width: '40%' }}>
+                  {/* {expenses[index].category} */}
+                  {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
+                  <IconButton
+                    size={'small'}
+                    onClick={async () => {
+                      await deleteThis(expenses[index]);
+                      setItem((prev: Expense) => {
+                        let cpy = cloneDeep(defaultItem(expenses));
+                        cpy.expenseName = `Expense ${expenses.length}`;
+                        return cpy;
+                      });
+                    }}
+                  >
+                    <MdIcons.MdClear />
+                  </IconButton>
+                </div>
+              );
+            })}
+        </div>
+        <div style={{ width: '40%', marginLeft: 'auto', marginRight: 0 }}>
           <div style={styles.circle}>${totalAmount}</div>
         </div>
-      </div> */}
+      </Paper>
     </div>
   );
 }
