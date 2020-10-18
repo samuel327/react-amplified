@@ -13,7 +13,7 @@ export function VerticalBarGraph(props: VerticalBarGraphProps) {
   console.log(JSON.stringify(expenses, null, 2));
 
   const data = {
-    labels: expenses.map((item: Expense) => item.subCategory),
+    labels: expenses.map((item: Expense) => item.expenseName),
     datasets: [
       {
         label: 'Categories',

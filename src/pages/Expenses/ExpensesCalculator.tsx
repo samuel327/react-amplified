@@ -288,105 +288,106 @@ export function ExpensesCalculator() {
           CLEAR
         </Button>
       </div>
-
-      <div
-        style={{
-          display: 'flex',
-          // flex: 'wrap',
-          //height: '500px',
-          //padding: 20,
-          // justifyContent: 'center',
-          // alignContent: 'center',
-        }}
-      >
-        <div>List of Expenses:</div>
-        <Paper
-          style={{ width: '50%', padding: 15, height: 400, marginTop: '50px' }}
-          onMouseEnter={() => toggleHoverClearBtn('listOfExpenses')}
-          onMouseLeave={() => toggleHoverClearBtn('listOfExpenses')}
-          elevation={hoverClearBtn.listOfExpenses ? 13 : 0}
-        >
-          {expenses &&
-            expenses.map((expense: Expense, index: number) => {
-              const { expenseName, dollarAmount, hover, subCategory } = expense;
-              return (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <div>{subCategory}</div>
-                  <div>{expenseName}: </div>
-                  <div>${dollarAmount}</div>
-                  <div></div>
-                  {/* {expenses[index].category} */}
-                  {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
-                  <IconButton
-                    size={'small'}
-                    onClick={async () => {
-                      await deleteThis(expenses[index]);
-                      setItem((prev: Expense) => {
-                        let cpy = cloneDeep(defaultItem(expenses));
-                        cpy.expenseName = `Expense ${expenses.length}`;
-                        return cpy;
-                      });
-                    }}
-                  >
-                    <MdIcons.MdClear />
-                  </IconButton>
-                </div>
-              );
-            })}
-        </Paper>
+      <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
         <div
-          style={{
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-            display: 'flex',
-            width: '100%',
-          }}
+          onMouseEnter={() => toggleHoverClearBtn('graph1')}
+          onMouseLeave={() => toggleHoverClearBtn('graph1')}
+          style={{ margin: 15 }}
         >
-          <div
-            style={{ width: '50%' }}
-            onMouseEnter={() => toggleHoverClearBtn('graph1')}
-            onMouseLeave={() => toggleHoverClearBtn('graph1')}
-          >
-            <div style={{ marginTop: 50, marginBottom: 15 }}>
-              <DoughnutGraph
-                expenses={expenses}
-                elevation={hoverClearBtn.graph1 ? 13 : 0}
-              />
-            </div>
-            <div
-              style={{ marginTop: 15 }}
-              onMouseEnter={() => toggleHoverClearBtn('graph2')}
-              onMouseLeave={() => toggleHoverClearBtn('graph2')}
-            >
-              <BarGraph
-                members={members}
-                expenses={expenses}
-                elevation={hoverClearBtn.graph2 ? 13 : 0}
-              />
-            </div>
-            <div
-              style={{ marginTop: 15 }}
-              onMouseEnter={() => toggleHoverClearBtn('graph3')}
-              onMouseLeave={() => toggleHoverClearBtn('graph3')}
-            >
-              <VerticalBarGraph
-                expenses={expenses}
-                elevation={hoverClearBtn.graph3 ? 13 : 0}
-              />
-            </div>
-          </div>
-          <Paper style={{ width: '30%' }} square variant="outlined">
-            <div style={styles.circle}>${totalAmount}</div>
-          </Paper>
+          <DoughnutGraph
+            expenses={expenses}
+            elevation={hoverClearBtn.graph1 ? 13 : 0}
+          />
+        </div>
+
+        <div
+          onMouseEnter={() => toggleHoverClearBtn('graph2')}
+          onMouseLeave={() => toggleHoverClearBtn('graph2')}
+          style={{ margin: 15 }}
+        >
+          <BarGraph
+            members={members}
+            expenses={expenses}
+            elevation={hoverClearBtn.graph2 ? 13 : 0}
+            style={{ margin: 15 }}
+          />
+        </div>
+        <div
+          onMouseEnter={() => toggleHoverClearBtn('graph3')}
+          onMouseLeave={() => toggleHoverClearBtn('graph3')}
+          style={{ margin: 15 }}
+        >
+          <VerticalBarGraph
+            expenses={expenses}
+            elevation={hoverClearBtn.graph3 ? 13 : 0}
+          />
         </div>
       </div>
+
+      <div style={{ margin: 5, marginLeft: 15 }}>
+        <h2>List of Expenses:</h2>
+      </div>
+      <Paper
+        style={{
+          width: '80%',
+          padding: 15,
+          height: 400,
+          marginTop: 50,
+          margin: 'auto',
+          marginBottom: 200,
+        }}
+        onMouseEnter={() => toggleHoverClearBtn('listOfExpenses')}
+        onMouseLeave={() => toggleHoverClearBtn('listOfExpenses')}
+        elevation={hoverClearBtn.listOfExpenses ? 13 : 0}
+      >
+        {expenses &&
+          expenses.map((expense: Expense, index: number) => {
+            const { expenseName, dollarAmount, hover, subCategory } = expense;
+            return (
+              <div
+                style={{
+                  display: 'flex',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <div>{subCategory}</div>
+                <div>{expenseName}: </div>
+                <div>${dollarAmount}</div>
+                <div></div>
+                {/* {expenses[index].category} */}
+                {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
+                <IconButton
+                  size={'small'}
+                  onClick={async () => {
+                    await deleteThis(expenses[index]);
+                    setItem((prev: Expense) => {
+                      let cpy = cloneDeep(defaultItem(expenses));
+                      cpy.expenseName = `Expense ${expenses.length}`;
+                      return cpy;
+                    });
+                  }}
+                >
+                  <MdIcons.MdClear />
+                </IconButton>
+              </div>
+            );
+          })}
+      </Paper>
+
+      {/* <div
+        style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          display: 'flex',
+          width: '100%',
+        }}
+      >
+        <div style={{ width: '40%' }}>
+          <div style={styles.circle}>${totalAmount}</div>
+        </div>
+      </div> */}
     </div>
   );
 }
