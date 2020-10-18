@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
+  Grid,
   IconButton,
   MenuItem,
   Paper,
@@ -89,6 +90,14 @@ export function ExpensesCalculator() {
       cpy[key] = !cpy[key];
       return cpy;
     });
+
+  const toggleHoverLineItem = (index: number) => {
+    setExpenses((prevObject: Expense[]) => {
+      let cpy = cloneDeep(prevObject);
+      cpy[index].hover = !cpy[index].hover;
+      return cpy;
+    });
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -351,11 +360,63 @@ export function ExpensesCalculator() {
                     alignItems: 'center',
                   }}
                 >
-                  <div>{index + 1}) </div>
-                  <div style={styles.lineItem}>{subCategory}</div>
-                  <div style={styles.lineItem}>{expenseName}: </div>
-                  <div style={styles.lineItem}>${dollarAmount}</div>
-                  <div style={styles.lineItem}></div>
+                  <Grid
+                    container
+                    xs
+                    style={{
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: hover ? 'rgb(220,220,220)' : '',
+                    }}
+                    onMouseEnter={() => toggleHoverLineItem(index)}
+                    onMouseLeave={() => toggleHoverLineItem(index)}
+                  >
+                    <Grid
+                      item
+                      xs
+                      style={{
+                        width: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {index + 1}){' '}
+                    </Grid>
+                    <Grid
+                      item
+                      xs
+                      style={{
+                        width: 150,
+                        justifyContent: 'left',
+                        marginLeft: 12,
+                      }}
+                    >
+                      {subCategory}
+                    </Grid>
+                    <Grid
+                      item
+                      xs
+                      style={{
+                        width: 150,
+                        justifyContent: 'left',
+                        marginLeft: 12,
+                      }}
+                    >
+                      {expenseName}:{' '}
+                    </Grid>
+                    <Grid
+                      item
+                      xs
+                      style={{
+                        width: 150,
+                        justifyContent: 'left',
+                        marginLeft: 12,
+                      }}
+                    >
+                      ${dollarAmount}
+                    </Grid>
+                  </Grid>
 
                   {/* {expenses[index].category} */}
                   {/* {selectLineItemCategory(expenses, setExpenses, index)} */}
