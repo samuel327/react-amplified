@@ -16,13 +16,10 @@ export function AggregatedExpenses(props: any) {
       }
     }
     getData();
+  }, []);
 
-    if (props.expenses) {
-      setTimeout(function () {
-        console.log('called');
-        getData();
-      }, 10000);
-    }
+  useEffect(() => {
+    console.log(props.expenses);
   }, [props.expenses]);
 
   const data = {

@@ -322,7 +322,7 @@ export function ExpensesCalculator() {
             elevation={hoverClearBtn.graph2 ? 13 : 0}
           />
         </div>
-        <div
+        {/* <div
           onMouseEnter={() => toggleHoverClearBtn('graph3')}
           onMouseLeave={() => toggleHoverClearBtn('graph3')}
           style={{ margin: 15, width: 300 }}
@@ -331,7 +331,7 @@ export function ExpensesCalculator() {
             expenses={expenses}
             elevation={hoverClearBtn.graph3 ? 13 : 0}
           />
-        </div>
+        </div> */}
         <div
           onMouseEnter={() => toggleHoverClearBtn('graph4')}
           onMouseLeave={() => toggleHoverClearBtn('graph4')}
@@ -340,6 +340,7 @@ export function ExpensesCalculator() {
           <AggregatedExpenses
             elevation={hoverClearBtn.graph4 ? 13 : 0}
             expenses={expenses}
+            item={item}
           />
         </div>
       </div>
