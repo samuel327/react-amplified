@@ -30,7 +30,7 @@ function DoughnutGraph(props: any) {
 
     let x: any = expensesArray.map((expense: Expense) => {
       if (expense.category === 'fun') {
-        console.log(expense.dollarAmount);
+        //console.log(expense.dollarAmount);
         if (Number(expense.dollarAmount)) {
           return Number(expense.dollarAmount);
         } else {
@@ -47,14 +47,14 @@ function DoughnutGraph(props: any) {
       setGraphData((prevObject: PieChartItem[]) => {
         let cpy: PieChartItem[] = cloneDeep(prevObject);
         cpy[0].amount_spent = Number(xx);
-        console.log(cpy);
+        //console.log(cpy);
         return cpy;
       });
     }
 
     let y: any = expensesArray.map((expense: Expense) => {
       if (expense.category === 'not fun') {
-        console.log(expense.dollarAmount);
+        //console.log(expense.dollarAmount);
         if (Number(expense.dollarAmount)) {
           return Number(expense.dollarAmount);
         } else {
@@ -69,7 +69,7 @@ function DoughnutGraph(props: any) {
       setGraphData((prevObject: PieChartItem[]) => {
         let cpy: PieChartItem[] = cloneDeep(prevObject);
         cpy[1].amount_spent = Number(yy);
-        console.log(cpy);
+        //console.log(cpy);
         return cpy;
       });
     }

@@ -62,7 +62,7 @@ function BarGraph(props: any) {
 
     let x: any = expensesArray.map((expense: Expense) => {
       if (expense.member === 'Samuel') {
-        console.log(expense.dollarAmount);
+        //console.log(expense.dollarAmount);
         if (Number(expense.dollarAmount)) {
           return Number(expense.dollarAmount);
         } else {
@@ -76,19 +76,19 @@ function BarGraph(props: any) {
     let xx = x.reduce(reducer);
 
     if (Number(xx) >= 0) {
-      console.log(expensesArray, members1);
+      //console.log(expensesArray, members1);
       setMembers((prevObject: Member[]) => {
         let cpy: Member[] = cloneDeep(prevObject);
         cpy[0].amount_spent = Number(xx);
         cpy[0].name = 'Samuel';
-        console.log(cpy);
+        //console.log(cpy);
         return cpy;
       });
     }
 
     let y: any = expensesArray.map((expense: Expense) => {
       if (expense.member === 'Elizabeth') {
-        console.log(expense.dollarAmount);
+        //console.log(expense.dollarAmount);
         if (Number(expense.dollarAmount)) {
           return Number(expense.dollarAmount);
         } else {
@@ -104,14 +104,14 @@ function BarGraph(props: any) {
         let cpy: Member[] = cloneDeep(prevObject);
         cpy[1].amount_spent = Number(yy);
         cpy[1].name = 'Elizabeth';
-        console.log(cpy);
+        //console.log(cpy);
         return cpy;
       });
     }
 
     let z: any = expensesArray.map((expense: Expense) => {
       if (expense.member === 'joint') {
-        console.log(expense.dollarAmount);
+        //console.log(expense.dollarAmount);
         if (Number(expense.dollarAmount)) {
           return Number(expense.dollarAmount);
         } else {
@@ -127,7 +127,7 @@ function BarGraph(props: any) {
         let cpy: Member[] = cloneDeep(prevObject);
         cpy[2].amount_spent = Number(zz);
         cpy[2].name = 'Joint';
-        console.log(cpy);
+        //console.log(cpy);
         return cpy;
       });
     }

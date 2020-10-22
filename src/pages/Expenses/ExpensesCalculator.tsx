@@ -18,6 +18,7 @@ import { createExpense, deleteExpense } from '../../graphql/mutations';
 import BarGraph from './components/BarGraph';
 import DoughnutGraph from './components/DoughnutGraph';
 import { VerticalBarGraph } from './components/VerticalBarGraph';
+import { AggregatedExpenses } from './components/AggregatedExpenses';
 
 const labels = ['fun', 'not fun'];
 
@@ -82,6 +83,7 @@ export function ExpensesCalculator() {
     graph1: false,
     graph2: false,
     graph3: false,
+    graph4: false,
     listOfExpenses: false,
   });
   const toggleHoverClearBtn = (key: string) =>
@@ -103,7 +105,7 @@ export function ExpensesCalculator() {
     const getData = async () => {
       let mems = await getMembers();
       let cats = await getCategories();
-      console.log(cats);
+      //console.log(cats);
       setMembers(mems);
       setCategories(cats);
     };
@@ -136,7 +138,7 @@ export function ExpensesCalculator() {
     let total: number = expensesArray
       .map((expense: Expense) => Number(expense.dollarAmount))
       .reduce(reducer);
-    console.log(total);
+    //console.log(total);
     updateTotalAmount(Math.round(total));
     return;
   }
@@ -328,6 +330,16 @@ export function ExpensesCalculator() {
           <VerticalBarGraph
             expenses={expenses}
             elevation={hoverClearBtn.graph3 ? 13 : 0}
+          />
+        </div>
+        <div
+          onMouseEnter={() => toggleHoverClearBtn('graph4')}
+          onMouseLeave={() => toggleHoverClearBtn('graph4')}
+          style={{ margin: 15, width: 300 }}
+        >
+          <AggregatedExpenses
+            elevation={hoverClearBtn.graph4 ? 13 : 0}
+            expenses={expenses}
           />
         </div>
       </div>

@@ -10,7 +10,7 @@ interface VerticalBarGraphProps {
 
 export function VerticalBarGraph(props: VerticalBarGraphProps) {
   const { expenses } = props;
-  console.log(JSON.stringify(expenses, null, 2));
+  //console.log(JSON.stringify(expenses, null, 2));
 
   const data = {
     labels: expenses.map((item: Expense) => item.expenseName),
@@ -24,7 +24,7 @@ export function VerticalBarGraph(props: VerticalBarGraphProps) {
   };
 
   //data.datasets[0].data = arrExpenses;
-  console.log(data);
+  //console.log(data);
   return (
     <Paper elevation={props.elevation}>
       <Bar
