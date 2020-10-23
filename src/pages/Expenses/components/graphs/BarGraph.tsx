@@ -2,7 +2,7 @@ import { Paper } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { HorizontalBar } from 'react-chartjs-2';
-import { Expense, Member, PieChartItem } from '../interfaces';
+import { Expense, Member, PieChartItem } from '../../interfaces';
 
 function producedDefaultMemberStateJson(memberArray: Member[]) {
   if (memberArray && memberArray.length > 0) {

@@ -1,7 +1,7 @@
 import { Paper } from '@material-ui/core';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Expense } from '../interfaces';
+import { Expense } from '../../interfaces';
 
 interface VerticalBarGraphProps {
   elevation: number;

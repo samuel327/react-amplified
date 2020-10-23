@@ -1,25 +1,24 @@
 import { Paper } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { getAggregatedData } from '../../../rds_apis/apiCalls';
+import { getAggregatedData } from '../../../../rds_apis/apiCalls';
 
 export function AggregatedExpenses(props: any) {
   const [aggExpenses, setAggExpenses] = useState<any>([
     { type: 'default', Total: 1 },
   ]);
-
-  useEffect(() => {
-    async function getData() {
-      let data = await getAggregatedData();
-      if (data) {
-        setAggExpenses(data);
-      }
+  async function getData() {
+    let data = await getAggregatedData();
+    if (data) {
+      setAggExpenses(data);
     }
-    getData();
-  }, []);
+  }
 
   useEffect(() => {
     console.log(props.expenses);
+    setTimeout(() => {
+      getData();
+    }, 2000);
   }, [props.expenses]);
 
   const data = {

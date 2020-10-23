@@ -2,11 +2,12 @@ import { Paper } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Expense, PieChartItem } from '../interfaces';
+import { Expense, PieChartItem } from '../../interfaces';
 
 const defaultPieChartState: PieChartItem[] = [
   { label: 'fun', amount_spent: 0 },
   { label: 'not fun', amount_spent: 0 },
+  { label: 'no opinion', amount_spent: 0 },
 ];
 
 function DoughnutGraph(props: any) {
@@ -16,6 +17,7 @@ function DoughnutGraph(props: any) {
   );
 
   useEffect(() => {
+    console.log(expenses);
     if (expenses && expenses.length > 0) {
       totalAmtsForGraph(expenses);
     } else if (expenses.length === 0) {
@@ -70,6 +72,28 @@ function DoughnutGraph(props: any) {
         let cpy: PieChartItem[] = cloneDeep(prevObject);
         cpy[1].amount_spent = Number(yy);
         //console.log(cpy);
+        return cpy;
+      });
+    }
+
+    let z: any = expensesArray.map((expense: Expense) => {
+      if (expense.category === 'no opinion') {
+        //console.log(expense.dollarAmount);
+        if (Number(expense.dollarAmount)) {
+          return Number(expense.dollarAmount);
+        } else {
+          return 0;
+        }
+      } else return 0;
+    });
+    console.log(z);
+    let zz = z.reduce(reducer);
+    console.log(zz);
+    if (Number(zz) >= 0) {
+      setGraphData((prevObject: PieChartItem[]) => {
+        let cpy: PieChartItem[] = cloneDeep(prevObject);
+        cpy[2].amount_spent = Number(zz);
+        console.log(cpy);
         return cpy;
       });
     }

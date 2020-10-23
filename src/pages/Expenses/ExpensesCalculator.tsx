@@ -15,12 +15,13 @@ import { getCategories, getMembers } from '../../rds_apis/apiCalls';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listExpenses } from '../../graphql/queries';
 import { createExpense, deleteExpense } from '../../graphql/mutations';
-import BarGraph from './components/BarGraph';
-import DoughnutGraph from './components/DoughnutGraph';
-import { VerticalBarGraph } from './components/VerticalBarGraph';
-import { AggregatedExpenses } from './components/AggregatedExpenses';
+import BarGraph from './components/graphs/BarGraph';
+import DoughnutGraph from './components/graphs/DoughnutGraph';
+import { VerticalBarGraph } from './components/graphs/VerticalBarGraph';
+import { AggregatedExpenses } from './components/graphs/AggregatedExpenses';
+import { AddCategory } from './components/graphs/inputFields/AddCategory';
 
-const labels = ['fun', 'not fun'];
+const labels = ['fun', 'not fun', 'no opinion'];
 
 function selectCategory(setItem: Function, item: Expense) {
   return (
@@ -376,8 +377,8 @@ export function ExpensesCalculator() {
                     style={
                       hover ? styles.onHoverLineItem : styles.inActiveLineItem
                     }
-                    onMouseEnter={() => toggleHoverLineItem(index)}
-                    onMouseLeave={() => toggleHoverLineItem(index)}
+                    // onMouseEnter={() => toggleHoverLineItem(index)}
+                    // onMouseLeave={() => toggleHoverLineItem(index)}
                   >
                     <Grid
                       item
@@ -413,7 +414,7 @@ export function ExpensesCalculator() {
                       ${dollarAmount}
                     </Grid>
                     <Grid item xs>
-                      {hover && (
+                      {true && (
                         <IconButton
                           size={'small'}
                           onClick={async () => {
@@ -441,6 +442,7 @@ export function ExpensesCalculator() {
           <div style={styles.circle}>${totalAmount}</div>
         </div>
       </Paper>
+      <AddCategory />
     </div>
   );
 }
