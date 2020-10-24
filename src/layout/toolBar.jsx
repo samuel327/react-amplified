@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,7 +24,17 @@ export const NavBar = (props) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        style={{
+          background: 'linear-gradient(45deg, #84C3C1 30%, #2E8B57 90%)',
+
+          color: 'white',
+
+          padding: '0 30px',
+          boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -36,9 +46,9 @@ export const NavBar = (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            React-Amplified
+            Dashboard
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button style={{ color: 'black' }}>Login</Button>
         </Toolbar>
       </AppBar>
     </div>

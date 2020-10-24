@@ -43,3 +43,54 @@ export const deleteTodo = /* GraphQL */ `
     }
   }
 `;
+export const createExpense = /* GraphQL */ `
+  mutation CreateExpense(
+    $input: CreateExpenseInput!
+    $condition: ModelExpenseConditionInput
+  ) {
+    createExpense(input: $input, condition: $condition) {
+      id
+      expenseName
+      dollarAmount
+      category
+      subCategory
+      member
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateExpense = /* GraphQL */ `
+  mutation UpdateExpense(
+    $input: UpdateExpenseInput!
+    $condition: ModelExpenseConditionInput
+  ) {
+    updateExpense(input: $input, condition: $condition) {
+      id
+      expenseName
+      dollarAmount
+      category
+      subCategory
+      member
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteExpense = /* GraphQL */ `
+  mutation DeleteExpense(
+    $input: DeleteExpenseInput!
+    $condition: ModelExpenseConditionInput
+  ) {
+    deleteExpense(input: $input, condition: $condition) {
+      id
+      expenseName
+      dollarAmount
+      category
+      subCategory
+      member
+      createdAt
+      updatedAt
+    }
+  }
+`;

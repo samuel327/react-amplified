@@ -2,14 +2,11 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 
@@ -19,6 +16,10 @@ const useStyles = makeStyles({
   },
   fullList: {
     width: 'auto',
+  },
+
+  link: {
+    textDecoration: 'none',
   },
 });
 export const DrawerMenu = (props) => {
@@ -34,7 +35,7 @@ export const DrawerMenu = (props) => {
       onKeyDown={() => props.toggleDrawer()}
     >
       <List>
-        <Link to={'/todo'}>
+        <Link to={'/todo'} className={classes.link}>
           <ListItem button key={'ToDo'}>
             <ListItemIcon>
               <FaIcons.FaCheckSquare />
@@ -42,7 +43,7 @@ export const DrawerMenu = (props) => {
             <ListItemText primary={'ToDo'} />
           </ListItem>
         </Link>
-        <Link to={'/budget'}>
+        <Link to={'/budget'} className={classes.link}>
           <ListItem button key={'Budget'}>
             <ListItemIcon>
               <FaIcons.FaMoneyBill />
@@ -50,12 +51,20 @@ export const DrawerMenu = (props) => {
             <ListItemText primary={'Budget'} />
           </ListItem>
         </Link>
-        <Link to={'/calculator'}>
+        <Link to={'/calculator'} className={classes.link}>
           <ListItem button key={'Expenses'}>
             <ListItemIcon>
               <FaIcons.FaChartLine />
             </ListItemIcon>
-            <ListItemText primary={'Budget'} />
+            <ListItemText primary={'Expenses'} />
+          </ListItem>
+        </Link>
+        <Link to={'/stocks'} className={classes.link}>
+          <ListItem button key={'Stocks'}>
+            <ListItemIcon>
+              <FaIcons.FaChartLine />
+            </ListItemIcon>
+            <ListItemText primary={'Stocks'} />
           </ListItem>
         </Link>
       </List>
