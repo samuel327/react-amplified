@@ -12,20 +12,26 @@ export function AddCategory(props: any) {
       <input
         value={newCat}
         onChange={(e) => {
-          setNewCat(e.target.value);
+          let val = e.target.value;
+          if (val !== '') {
+            setNewCat(val);
+          }
         }}
       ></input>
       <button
         onClick={() => {
-          if (newCat) setNewCategory(newCat);
-          setTimeout(async () => {
-            let newCats = await getCategories();
-            console.log(newCats);
-            props.setCategories(newCats);
-          }, 5000);
+          if (newCat !== '' && newCat) {
+            console.log(newCat);
+            if (newCat) setNewCategory(newCat);
+            setTimeout(async () => {
+              let newCats = await getCategories();
+              console.log(newCats);
+              props.setCategories(newCats);
+            }, 5000);
+          }
         }}
       >
-        submit
+        Add
       </button>
     </div>
   );

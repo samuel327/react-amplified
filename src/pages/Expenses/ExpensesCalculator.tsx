@@ -457,7 +457,7 @@ export function ExpensesCalculator() {
       </Paper>
       <div style={{ marginBottom: 200 }}>
         <AddCategory setCategories={setCategories} />
-        <RemoveCategory categories={categories} />
+        <RemoveCategory categories={categories} setCategories={setCategories} />
         <div
           onMouseEnter={() => hoverItem('graph4')}
           onMouseLeave={() => leaveItem('graph4')}

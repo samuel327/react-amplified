@@ -44,6 +44,23 @@ export function setNewCategory(category: string) {
     });
 }
 
+export function removeCategory(category: string) {
+  const data = JSON.stringify({
+    tag: 'removeCategory',
+    category: category,
+  });
+  console.log(data);
+  return axios_base
+    .post('/categories', data)
+    .then((res: any) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((e: any) => {
+      console.log(e);
+    });
+}
+
 export function getAggregatedData() {
   return axios_base
     .get('/aggregatedexpenses')
