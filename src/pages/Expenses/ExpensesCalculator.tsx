@@ -11,7 +11,11 @@ import * as MdIcons from 'react-icons/md';
 import { styles } from '../styles/styles';
 import cloneDeep from 'lodash/cloneDeep';
 import { Expense, Member, PieChartItem } from './interfaces';
-import { getCategories, getMembers } from '../../rds_apis/apiCalls';
+import {
+  getCategories,
+  getMembers,
+  resetExpenses,
+} from '../../rds_apis/apiCalls';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listExpenses } from '../../graphql/queries';
 import { createExpense, deleteExpense } from '../../graphql/mutations';
@@ -20,7 +24,8 @@ import DoughnutGraph from './components/graphs/DoughnutGraph';
 import { VerticalBarGraph } from './components/graphs/VerticalBarGraph';
 import { AggregatedExpenses } from './components/graphs/AggregatedExpenses';
 import { AddCategory } from './components/graphs/inputFields/AddCategory';
-
+import { RemoveCategory } from './components/graphs/inputFields/RemoveCategory';
+import { Category } from './interfaces';
 const labels = ['fun', 'not fun', 'no opinion'];
 
 function selectCategory(setItem: Function, item: Expense) {
@@ -77,7 +82,7 @@ export function ExpensesCalculator() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [item, setItem] = useState<Expense>(defaultItem(expenses));
   const [members, setMembers] = useState<Member[]>([]);
-  const [categories, setCategories] = useState<object[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [hover, setHover] = useState(false);
   const toggleHover = () => setHover(!hover);
   const [hoverClearBtn, setHoverClearBtn] = useState({
@@ -87,10 +92,16 @@ export function ExpensesCalculator() {
     graph4: false,
     listOfExpenses: false,
   });
-  const toggleHoverClearBtn = (key: string) =>
+  const hoverItem = (key: string) =>
     setHoverClearBtn((prevObject: any) => {
       let cpy: any = cloneDeep(prevObject);
-      cpy[key] = !cpy[key];
+      cpy[key] = true;
+      return cpy;
+    });
+  const leaveItem = (key: string) =>
+    setHoverClearBtn((prevObject: any) => {
+      let cpy: any = cloneDeep(prevObject);
+      cpy[key] = false;
       return cpy;
     });
 
@@ -277,7 +288,7 @@ export function ExpensesCalculator() {
           ADD
         </Button>
         <Button
-          onClick={() => {
+          onClick={async () => {
             updateTotalAmount(0);
             Promise.all(
               expenses.map((expense: Expense) => {
@@ -295,6 +306,7 @@ export function ExpensesCalculator() {
               member: '',
               hover: false,
             });
+            await resetExpenses();
           }}
         >
           CLEAR
@@ -302,8 +314,8 @@ export function ExpensesCalculator() {
       </div>
       <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
         <div
-          onMouseEnter={() => toggleHoverClearBtn('graph1')}
-          onMouseLeave={() => toggleHoverClearBtn('graph1')}
+          onMouseEnter={() => hoverItem('graph1')}
+          onMouseLeave={() => leaveItem('graph1')}
           style={{ margin: 15, width: 300 }}
         >
           <DoughnutGraph
@@ -313,8 +325,8 @@ export function ExpensesCalculator() {
         </div>
 
         <div
-          onMouseEnter={() => toggleHoverClearBtn('graph2')}
-          onMouseLeave={() => toggleHoverClearBtn('graph2')}
+          onMouseEnter={() => hoverItem('graph2')}
+          onMouseLeave={() => leaveItem('graph2')}
           style={{ margin: 15, width: 300 }}
         >
           <BarGraph
@@ -334,14 +346,15 @@ export function ExpensesCalculator() {
           />
         </div> */}
         <div
-          onMouseEnter={() => toggleHoverClearBtn('graph4')}
-          onMouseLeave={() => toggleHoverClearBtn('graph4')}
+          onMouseEnter={() => hoverItem('graph4')}
+          onMouseLeave={() => leaveItem('graph4')}
           style={{ margin: 15, width: 300 }}
         >
           <AggregatedExpenses
             elevation={hoverClearBtn.graph4 ? 13 : 0}
             expenses={expenses}
             item={item}
+            categories={categories}
           />
         </div>
       </div>
@@ -355,8 +368,8 @@ export function ExpensesCalculator() {
           margin: 'auto',
           marginBottom: 200,
         }}
-        onMouseEnter={() => toggleHoverClearBtn('listOfExpenses')}
-        onMouseLeave={() => toggleHoverClearBtn('listOfExpenses')}
+        onMouseEnter={() => hoverItem('listOfExpenses')}
+        onMouseLeave={() => leaveItem('listOfExpenses')}
         elevation={hoverClearBtn.listOfExpenses ? 13 : 0}
       >
         <div>
@@ -442,7 +455,21 @@ export function ExpensesCalculator() {
           <div style={styles.circle}>${totalAmount}</div>
         </div>
       </Paper>
-      <AddCategory />
+      <div style={{ marginBottom: 200 }}>
+        <AddCategory setCategories={setCategories} />
+        <RemoveCategory categories={categories} />
+        <div
+          onMouseEnter={() => hoverItem('graph4')}
+          onMouseLeave={() => leaveItem('graph4')}
+        >
+          <AggregatedExpenses
+            elevation={hoverClearBtn.graph4 ? 13 : 0}
+            expenses={expenses}
+            item={item}
+            categories={categories}
+          />
+        </div>
+      </div>
     </div>
   );
 }

@@ -27,7 +27,36 @@ export function getCategories() {
     });
 }
 
+export function setNewCategory(category: string) {
+  const data = JSON.stringify({
+    tag: 'addCategory',
+    newCategory: category,
+  });
+  console.log(data);
+  return axios_base
+    .post('/categories', data)
+    .then((res: any) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((e: any) => {
+      console.log(e);
+    });
+}
+
 export function getAggregatedData() {
+  return axios_base
+    .get('/aggregatedexpenses')
+    .then((res: any) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((e: any) => {
+      console.log(e);
+    });
+}
+
+export function resetExpenses() {
   return axios_base
     .get('/aggregatedexpenses')
     .then((res: any) => {

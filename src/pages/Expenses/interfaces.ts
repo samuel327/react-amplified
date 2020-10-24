@@ -17,3 +17,8 @@ export interface PieChartItem {
   label: string;
   amount_spent: number;
 }
+
+export interface Category {
+  ID: string;
+  type: string;
+}

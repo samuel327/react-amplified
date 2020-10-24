@@ -15,11 +15,10 @@ export function AggregatedExpenses(props: any) {
   }
 
   useEffect(() => {
-    console.log(props.expenses);
     setTimeout(() => {
       getData();
     }, 2000);
-  }, [props.expenses]);
+  }, [props.expenses, props.categories]);
 
   const data = {
     labels: aggExpenses.map((item: any) => item.type),
