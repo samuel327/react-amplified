@@ -18,6 +18,7 @@
     "aws-amplify": "^3.3.2",
     "axios": "^0.20.0",
     "chart.js": "^2.9.3",
+    "d3-dsv": "^2.0.0",
     "polygon.io": "^1.0.0",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.10.0",
@@ -27,6 +28,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-scroll-horizontal": "^1.6.6",
+    "react-stockcharts": "^0.7.8",
     "typescript": "^4.0.3"
   },
   "scripts": {

@@ -9,7 +9,7 @@ import { ToDo } from './components/Todo/ToDo';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ExpensesCalculator } from './pages/Expenses/ExpensesCalculator';
-import { Stocks } from './pages/Stocks/Stocks';
+import Stocks from './pages/Stocks/Stocks';
 
 Amplify.configure(awsExports);
 
