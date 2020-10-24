@@ -32,7 +32,7 @@ class ChartComponent extends React.Component {
       this.setState({ data });
     });
     // getData().then((data) => {
-    //   console.log(data);
+    //   //console.log(data);
     //   this.setState({ data });
     // });
   }

@@ -21,39 +21,40 @@ class CandleStickChart extends React.Component {
       if (d) {
         const milliseconds = d.t;
         const dateObject = new Date(milliseconds);
-        let date = dateObject.toISOString();
-        console.log(date);
+        let date = dateObject;
         return date;
       }
     };
-    const xExtents = [xAccessor(last(data)), xAccessor(data[0])];
-    return (
-      <ChartCanvas
-        height={400}
-        ratio={ratio}
-        width={width}
-        margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
-        type={type}
-        seriesName="AAPL"
-        data={data}
-        xAccessor={xAccessor}
-        xScale={scaleTime()}
-        xExtents={xExtents}
-      >
-        <Chart
-          id={1}
-          yExtents={(d) => {
-            console.log(d, [d.h, d.l]);
-            //return [d.h, d.l];
-            return [d.high, d.low];
-          }}
+    const xExtents = [xAccessor(last(data)), xAccessor(data[10])];
+    if (data) {
+      return (
+        <ChartCanvas
+          height={400}
+          ratio={ratio}
+          width={width}
+          margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
+          type={type}
+          seriesName="AAPL"
+          data={data}
+          xAccessor={xAccessor}
+          xScale={scaleTime()}
+          xExtents={xExtents}
         >
-          <XAxis axisAt="bottom" orient="bottom" ticks={16} />
-          <YAxis axisAt="left" orient="left" ticks={15} />
-          <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
-        </Chart>
-      </ChartCanvas>
-    );
+          <Chart
+            id={1}
+            yExtents={(d) => {
+              //console.log(d, [d.h, d.l]);
+              return [d.h, d.l];
+              //return [d.high, d.low];
+            }}
+          >
+            <XAxis axisAt="bottom" orient="bottom" ticks={10} />
+            <YAxis axisAt="left" orient="left" ticks={10} />
+            <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
+          </Chart>
+        </ChartCanvas>
+      );
+    }
   }
 }
 
