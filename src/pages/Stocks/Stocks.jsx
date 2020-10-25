@@ -28,7 +28,7 @@ import { TypeChooser } from 'react-stockcharts/lib/helper';
 class ChartComponent extends React.Component {
   componentDidMount() {
     getPolygonIOData().then((data) => {
-      console.log(data);
+      //console.log(data);
       this.setState({ data });
     });
     // getData().then((data) => {
@@ -36,6 +36,7 @@ class ChartComponent extends React.Component {
     //   this.setState({ data });
     // });
   }
+
   render() {
     if (this.state == null) {
       return <div>Loading...</div>;

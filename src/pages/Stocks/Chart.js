@@ -13,48 +13,52 @@ import { last, timeIntervalBarWidth } from 'react-stockcharts/lib/utils';
 class CandleStickChart extends React.Component {
   render() {
     const { type, width, data, ratio } = this.props;
-    // const xAccessor = (d) => {
-    //   console.log(d.date);
-    //   return d.date;
-    // };
     const xAccessor = (d) => {
-      if (d) {
-        const milliseconds = d.t;
-        const dateObject = new Date(milliseconds);
-        let date = dateObject;
-        return date;
-      }
+      console.log(d.date);
+      return d.date;
     };
+    // const xAccessor = (d) => {
+    //   if (d) {
+    //     console.log(d);
+    //     const milliseconds = d.t;
+    //     const dateObject = new Date(milliseconds);
+    //     let date = dateObject;
+    //     //console.log(date);
+    //     d.t = date;
+    //     return date;
+    //   }
+    // };
+    //console.log(data);
     const xExtents = [xAccessor(last(data)), xAccessor(data[10])];
-    if (data) {
-      return (
-        <ChartCanvas
-          height={400}
-          ratio={ratio}
-          width={width}
-          margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
-          type={type}
-          seriesName="AAPL"
-          data={data}
-          xAccessor={xAccessor}
-          xScale={scaleTime()}
-          xExtents={xExtents}
+    //console.log(data, xExtents);
+
+    return (
+      <ChartCanvas
+        height={400}
+        ratio={ratio}
+        width={width}
+        margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
+        type={type}
+        seriesName="AAPL"
+        data={data}
+        xAccessor={xAccessor}
+        xScale={scaleTime()}
+        xExtents={xExtents}
+      >
+        <Chart
+          id={1}
+          yExtents={(d) => {
+            //console.log(d, [d.h, d.l]);
+            //return [d.h, d.l];
+            return [d.high, d.low];
+          }}
         >
-          <Chart
-            id={1}
-            yExtents={(d) => {
-              //console.log(d, [d.h, d.l]);
-              return [d.h, d.l];
-              //return [d.high, d.low];
-            }}
-          >
-            <XAxis axisAt="bottom" orient="bottom" ticks={10} />
-            <YAxis axisAt="left" orient="left" ticks={10} />
-            <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
-          </Chart>
-        </ChartCanvas>
-      );
-    }
+          <XAxis axisAt="bottom" orient="bottom" ticks={10} />
+          <YAxis axisAt="left" orient="left" ticks={5} />
+          <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
+        </Chart>
+      </ChartCanvas>
+    );
   }
 }
 
