@@ -18,10 +18,10 @@ export const getPolygonIOData = (company: string, today: string) => {
 
 // GET/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}
 
-export function getTickers(page: number) {
+export function getTickers(page: number, search?: string) {
   return axios
     .get(
-      `https://api.polygon.io/v2/reference/tickers?sort=ticker&perpage=50&page=${page}&apiKey=0pZSRnSVRBxxsVLEBK_NCKmqUmnYcphI`
+      `https://api.polygon.io/v2/reference/tickers?sort=ticker&search=${search}&perpage=50&page=${page}&apiKey=0pZSRnSVRBxxsVLEBK_NCKmqUmnYcphI`
     )
     .then((res: any) => {
       console.log(res.data.tickers);
