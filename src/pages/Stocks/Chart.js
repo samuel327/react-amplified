@@ -62,8 +62,19 @@ class CandleStickChart extends React.Component {
         >
           <XAxis axisAt="bottom" orient="bottom" ticks={20} />
           <YAxis axisAt="left" orient="left" ticks={15} />
+          <MouseCoordinateX
+            at="bottom"
+            orient="bottom"
+            displayFormat={timeFormat('%Y-%m-%d')}
+          />
+          <MouseCoordinateY
+            at="right"
+            orient="right"
+            displayFormat={format('.2f')}
+          />
           <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
         </Chart>
+        <CrossHairCursor />
       </ChartCanvas>
     );
   }

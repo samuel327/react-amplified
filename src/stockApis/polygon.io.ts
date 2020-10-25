@@ -3,7 +3,7 @@ const axios = require('axios');
 export const getPolygonIOData = (company: string, today: string) => {
   return axios
     .get(
-      `https://api.polygon.io/v2/aggs/ticker/${company}/range/1/day/2018-01-01/${today}?sort=asc&apiKey=0pZSRnSVRBxxsVLEBK_NCKmqUmnYcphI`
+      `https://api.polygon.io/v2/aggs/ticker/${company}/range/1/day/2020-01-01/${today}?sort=asc&apiKey=0pZSRnSVRBxxsVLEBK_NCKmqUmnYcphI`
     )
     .then((res: any) => {
       //console.log(JSON.stringify(res.data.results, null, 2));

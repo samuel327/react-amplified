@@ -47,7 +47,7 @@ function StocksFunctional() {
       <StockSelector stock={stock} setStock={setStock} />
 
       <div>
-        {stock} TICKER GRAPH 2018-01-01 thru {today}
+        {stock} TICKER GRAPH 2020-01-01 thru {today}
       </div>
       {data && (
         <TypeChooser>
