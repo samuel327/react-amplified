@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { scaleTime } from 'd3-scale';
-import { utcDay, utcMonth } from 'd3-time';
+import { utcDay } from 'd3-time';
 
 import { ChartCanvas, Chart } from 'react-stockcharts';
 import { CandlestickSeries } from 'react-stockcharts/lib/series';
@@ -14,23 +14,10 @@ class CandleStickChart extends React.Component {
   render() {
     const { type, width, data, ratio } = this.props;
     const xAccessor = (d) => {
-      console.log(d.date);
       return d.date;
     };
-    // const xAccessor = (d) => {
-    //   if (d) {
-    //     console.log(d);
-    //     const milliseconds = d.t;
-    //     const dateObject = new Date(milliseconds);
-    //     let date = dateObject;
-    //     //console.log(date);
-    //     d.t = date;
-    //     return date;
-    //   }
-    // };
-    //console.log(data);
+
     const xExtents = [xAccessor(last(data)), xAccessor(data[10])];
-    //console.log(data, xExtents);
 
     return (
       <ChartCanvas
@@ -48,8 +35,6 @@ class CandleStickChart extends React.Component {
         <Chart
           id={1}
           yExtents={(d) => {
-            //console.log(d, [d.h, d.l]);
-            //return [d.h, d.l];
             return [d.high, d.low];
           }}
         >

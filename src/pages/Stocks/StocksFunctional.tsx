@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Chart from './Chart';
 import { getPolygonIOData } from '../../stockApis/polygon.io';
 import { TypeChooser } from 'react-stockcharts/lib/helper';
+import { StockSelector } from './components/StockSelector';
 
 interface OHLCKeys {
   date: any;
@@ -13,17 +14,6 @@ interface OHLCKeys {
 }
 
 function mapper(objArray: any) {
-  let keys = Object.keys(objArray[0]);
-  console.log(keys);
-  let newObj: OHLCKeys = {
-    date: '',
-    open: '',
-    high: '',
-    low: '',
-    close: '',
-    volume: '',
-  };
-
   let newArrayOfObjects = objArray.map((obj: any) => {
     const milliseconds = JSON.parse(JSON.stringify(obj.t));
     const dateObject = new Date(milliseconds);
@@ -36,32 +26,38 @@ function mapper(objArray: any) {
       close: obj.c,
       volume: obj.v,
     };
-    console.log(newObj);
     return newObj;
   });
-  console.log(newArrayOfObjects);
   return newArrayOfObjects;
 }
 
 function StocksFunctional() {
   const [data, setFinancialData] = useState<any>();
 
+  const [stock, setStock] = useState<string>('AAPL');
+  const [today, setToday] = useState<string>('');
   useEffect(() => {
+    let today = new Date();
+    let todayAsString = today.toISOString().split('T')[0];
+    setToday(todayAsString);
     const getData = async () => {
-      let data = await getPolygonIOData();
+      let data = await getPolygonIOData(stock, todayAsString);
       if (data) {
         let data2 = mapper(data);
-        console.log(data2);
         if (data2) {
           setFinancialData(data2);
         }
       }
     };
     getData();
-  }, []);
+  }, [stock]);
   return (
     <>
-      <div>APPLE TICKER GRAPH 2018-01-01 thru 2020-10-22</div>
+      <StockSelector stock={stock} setStock={setStock} />
+
+      <div>
+        {stock} TICKER GRAPH 2018-01-01 thru {today}
+      </div>
       {data && (
         <TypeChooser>
           {(type: any) => <Chart type={type} data={data} />}
