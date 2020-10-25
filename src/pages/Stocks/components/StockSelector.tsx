@@ -20,6 +20,7 @@ export function StockSelector(props: StockSelectorProps) {
       >
         <option>AAPL</option>
         <option>TSLA</option>
+        <option>AMZN</option>
         <option>AMD</option>
       </select>
     </div>

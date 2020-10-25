@@ -1,13 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { format } from 'd3-format';
+import { timeFormat } from 'd3-time-format';
 import { scaleTime } from 'd3-scale';
 import { utcDay } from 'd3-time';
 
 import { ChartCanvas, Chart } from 'react-stockcharts';
-import { CandlestickSeries } from 'react-stockcharts/lib/series';
+import { CandlestickSeries, LineSeries } from 'react-stockcharts/lib/series';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
+import {
+  CrossHairCursor,
+  EdgeIndicator,
+  CurrentCoordinate,
+  MouseCoordinateX,
+  MouseCoordinateY,
+} from 'react-stockcharts/lib/coordinates';
+import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
+import {
+  OHLCTooltip,
+  MovingAverageTooltip,
+} from 'react-stockcharts/lib/tooltip';
+import { ema } from 'react-stockcharts/lib/indicator';
 import { fitWidth } from 'react-stockcharts/lib/helper';
+import algo from 'react-stockcharts/lib/algorithm';
+import {
+  Label,
+  Annotate,
+  SvgPathAnnotation,
+  buyPath,
+  sellPath,
+} from 'react-stockcharts/lib/annotation';
 import { last, timeIntervalBarWidth } from 'react-stockcharts/lib/utils';
 
 class CandleStickChart extends React.Component {
@@ -26,7 +48,7 @@ class CandleStickChart extends React.Component {
         width={width}
         margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
         type={type}
-        seriesName="AAPL"
+        seriesName={this.props.stock}
         data={data}
         xAccessor={xAccessor}
         xScale={scaleTime()}

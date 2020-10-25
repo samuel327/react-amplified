@@ -4,15 +4,6 @@ import { getPolygonIOData } from '../../stockApis/polygon.io';
 import { TypeChooser } from 'react-stockcharts/lib/helper';
 import { StockSelector } from './components/StockSelector';
 
-interface OHLCKeys {
-  date: any;
-  open: any;
-  high: any;
-  low: any;
-  close: any;
-  volume: any;
-}
-
 function mapper(objArray: any) {
   let newArrayOfObjects = objArray.map((obj: any) => {
     const milliseconds = JSON.parse(JSON.stringify(obj.t));
@@ -60,7 +51,7 @@ function StocksFunctional() {
       </div>
       {data && (
         <TypeChooser>
-          {(type: any) => <Chart type={type} data={data} />}
+          {(type: any) => <Chart type={type} data={data} stock={stock} />}
         </TypeChooser>
       )}
     </>
