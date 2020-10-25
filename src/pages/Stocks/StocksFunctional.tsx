@@ -61,7 +61,7 @@ function StocksFunctional() {
   }, []);
   return (
     <>
-      <div>APPLE TICKER GRAPH 2018-01-01 thru 2019-01-01</div>
+      <div>APPLE TICKER GRAPH 2018-01-01 thru 2020-10-22</div>
       {data && (
         <TypeChooser>
           {(type: any) => <Chart type={type} data={data} />}
