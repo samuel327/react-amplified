@@ -34,34 +34,138 @@ import { last, timeIntervalBarWidth } from 'react-stockcharts/lib/utils';
 
 class CandleStickChart extends React.Component {
   render() {
-    const { type, width, data, ratio } = this.props;
-    const xAccessor = (d) => {
-      return d.date;
+    const { type, width, data: initial, ratio } = this.props;
+    // const xAccessor = (d) => {
+    //   return d.date;
+    // };
+
+    // const xExtents = [xAccessor(last(data)), xAccessor(data[10])];
+
+    /******************
+     *
+     *
+     *
+     *
+     */
+
+    const ema20 = ema()
+      .id(0)
+      .options({ windowSize: 13 })
+      .merge((d, c) => {
+        d.ema20 = c;
+      })
+      .accessor((d) => d.ema20);
+
+    const ema50 = ema()
+      .id(2)
+      .options({ windowSize: 50 })
+      .merge((d, c) => {
+        d.ema50 = c;
+      })
+      .accessor((d) => d.ema50);
+
+    const buySell = algo()
+      .windowSize(2)
+      .accumulator(([prev, now]) => {
+        const { ema20: prevShortTerm, ema50: prevLongTerm } = prev;
+        const { ema20: nowShortTerm, ema50: nowLongTerm } = now;
+        if (prevShortTerm < prevLongTerm && nowShortTerm > nowLongTerm)
+          return 'LONG';
+        if (prevShortTerm > prevLongTerm && nowShortTerm < nowLongTerm)
+          return 'SHORT';
+      })
+      .merge((d, c) => {
+        d.longShort = c;
+      });
+
+    const defaultAnnotationProps = {
+      onClick: console.log.bind(console),
     };
 
-    const xExtents = [xAccessor(last(data)), xAccessor(data[10])];
+    const longAnnotationProps = {
+      ...defaultAnnotationProps,
+      y: ({ yScale, datum }) => yScale(datum.low),
+      fill: '#006517',
+      path: buyPath,
+      tooltip: 'Go long',
+    };
+
+    const shortAnnotationProps = {
+      ...defaultAnnotationProps,
+      y: ({ yScale, datum }) => yScale(datum.high),
+      fill: '#FF0000',
+      path: sellPath,
+      tooltip: 'Go short',
+    };
+
+    const margin = { left: 80, right: 80, top: 30, bottom: 50 };
+    const height = 400;
+
+    const [yAxisLabelX, yAxisLabelY] = [
+      width - margin.left - 40,
+      margin.top + (height - margin.top - margin.bottom) / 2,
+    ];
+
+    const calculatedData = buySell(ema50(ema20(initial)));
+    const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(
+      (d) => d.date
+    );
+
+    const { data, xScale, xAccessor, displayXAccessor } = xScaleProvider(
+      calculatedData
+    );
+
+    const start = xAccessor(last(data));
+    const end = xAccessor(data[Math.max(0, data.length - 150)]);
+    const xExtents = [start, end];
+    /*********
+     *
+     *
+     *
+     *
+     */
 
     return (
       <ChartCanvas
-        height={400}
-        ratio={ratio}
+        height={height}
         width={width}
-        margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
+        ratio={ratio}
+        margin={margin}
         type={type}
-        seriesName={this.props.stock}
+        seriesName="MSFT"
         data={data}
+        xScale={xScale}
         xAccessor={xAccessor}
-        xScale={scaleTime()}
+        displayXAccessor={displayXAccessor}
         xExtents={xExtents}
       >
         <Chart
           id={1}
-          yExtents={(d) => {
-            return [d.high, d.low];
-          }}
+          yExtents={[
+            (d) => [d.high, d.low],
+            ema20.accessor(),
+            ema50.accessor(),
+          ]}
+          padding={{ top: 10, bottom: 20 }}
         >
-          <XAxis axisAt="bottom" orient="bottom" ticks={20} />
-          <YAxis axisAt="left" orient="left" ticks={15} />
+          <XAxis axisAt="bottom" orient="bottom" />
+
+          <Label
+            x={(width - margin.left - margin.right) / 2}
+            y={height - 45}
+            fontSize="12"
+            text="Time "
+          />
+
+          <YAxis axisAt="right" orient="right" ticks={5} />
+
+          <Label
+            x={yAxisLabelX}
+            y={yAxisLabelY}
+            rotate={-90}
+            fontSize="12"
+            text="Price"
+          />
           <MouseCoordinateX
             at="bottom"
             orient="bottom"
@@ -72,7 +176,57 @@ class CandleStickChart extends React.Component {
             orient="right"
             displayFormat={format('.2f')}
           />
-          <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
+
+          <CandlestickSeries />
+          <LineSeries yAccessor={ema20.accessor()} stroke={ema20.stroke()} />
+          <LineSeries yAccessor={ema50.accessor()} stroke={ema50.stroke()} />
+
+          <CurrentCoordinate
+            yAccessor={ema20.accessor()}
+            fill={ema20.stroke()}
+          />
+          <CurrentCoordinate
+            yAccessor={ema50.accessor()}
+            fill={ema50.stroke()}
+          />
+          <EdgeIndicator
+            itemType="last"
+            orient="right"
+            edgeAt="right"
+            yAccessor={(d) => d.close}
+            fill={(d) => (d.close > d.open ? '#6BA583' : '#FF0000')}
+          />
+
+          <OHLCTooltip origin={[-40, 0]} />
+          <MovingAverageTooltip
+            onClick={(e) => console.log(e)}
+            origin={[-38, 15]}
+            options={[
+              {
+                yAccessor: ema20.accessor(),
+                type: 'EMA',
+                stroke: ema20.stroke(),
+                windowSize: ema20.options().windowSize,
+              },
+              {
+                yAccessor: ema50.accessor(),
+                type: 'EMA',
+                stroke: ema50.stroke(),
+                windowSize: ema50.options().windowSize,
+              },
+            ]}
+          />
+
+          <Annotate
+            with={SvgPathAnnotation}
+            when={(d) => d.longShort === 'LONG'}
+            usingProps={longAnnotationProps}
+          />
+          <Annotate
+            with={SvgPathAnnotation}
+            when={(d) => d.longShort === 'SHORT'}
+            usingProps={shortAnnotationProps}
+          />
         </Chart>
         <CrossHairCursor />
       </ChartCanvas>
