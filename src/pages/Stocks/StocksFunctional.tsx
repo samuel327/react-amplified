@@ -3,6 +3,7 @@ import Chart from './Chart';
 import { getPolygonIOData } from '../../stockApis/polygon.io';
 import { StockSelector } from './components/StockSelector';
 import { Paper } from '@material-ui/core';
+import StockNews from './components/StockNews';
 
 function mapper(objArray: any) {
   let newArrayOfObjects = objArray.map((obj: any) => {
@@ -52,6 +53,7 @@ function StocksFunctional() {
       <Paper style={{ margin: '5%' }}>
         {data && <Chart type={'hybrid'} data={data} stock={stock} />}
       </Paper>
+      <StockNews stock={stock} />
     </>
   );
 }

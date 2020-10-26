@@ -31,3 +31,17 @@ export function getTickers(page: number, search?: string) {
       console.log(e);
     });
 }
+
+export function getTickerNews(name: string) {
+  return axios
+    .get(
+      `https://api.polygon.io/v1/meta/symbols/${name}/news?perpage=50&page=1&apiKey=0pZSRnSVRBxxsVLEBK_NCKmqUmnYcphI`
+    )
+    .then((res: any) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((e: any) => {
+      console.log(e);
+    });
+}
