@@ -9,7 +9,6 @@ import { ToDo } from './components/Todo/ToDo';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ExpensesCalculator } from './pages/Expenses/ExpensesCalculator';
-import Stocks from './pages/Stocks/Stocks';
 import FunctionalStocks from './pages/Stocks/StocksFunctional';
 
 Amplify.configure(awsExports);
@@ -29,7 +28,6 @@ const App = () => {
           <Route path="/todo" component={ToDo} />
           <Route path="/budget" render={() => <></>} />
           <Route path="/calculator" component={ExpensesCalculator} />
-          {/* <Route path="/stocks" component={Stocks} /> */}
           <Route path="/stocks" component={FunctionalStocks} />
         </Switch>
       </Router>

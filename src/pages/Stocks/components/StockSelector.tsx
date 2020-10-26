@@ -51,10 +51,6 @@ export function StockSelector(props: StockSelectorProps) {
           props.setStock(stock);
         }}
       >
-        {/* <option>AAPL</option>
-        <option>TSLA</option>
-        <option>AMZN</option>
-        <option>AMD</option> */}
         <option></option>
         {options.map((option: any) => {
           return <option>{option.ticker}</option>;

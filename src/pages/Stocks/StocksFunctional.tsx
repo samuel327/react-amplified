@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Chart from './Chart';
 import { getPolygonIOData } from '../../stockApis/polygon.io';
-import { TypeChooser } from 'react-stockcharts/lib/helper';
 import { StockSelector } from './components/StockSelector';
+import { Paper } from '@material-ui/core';
 
 function mapper(objArray: any) {
   let newArrayOfObjects = objArray.map((obj: any) => {
@@ -49,11 +49,9 @@ function StocksFunctional() {
       <div>
         {stock} TICKER GRAPH 2020-01-01 thru {today}
       </div>
-      {data && (
-        <TypeChooser>
-          {(type: any) => <Chart type={type} data={data} stock={stock} />}
-        </TypeChooser>
-      )}
+      <Paper style={{ margin: '5%' }}>
+        {data && <Chart type={'hybrid'} data={data} stock={stock} />}
+      </Paper>
     </>
   );
 }
