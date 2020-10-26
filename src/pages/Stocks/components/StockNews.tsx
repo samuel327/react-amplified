@@ -5,8 +5,19 @@ interface StockNewsProps {
   stock: string;
 }
 
+interface News {
+  symbols: string[];
+  title: string;
+  url: string;
+  source: string;
+  summary: string;
+  image: string;
+  timestamp: string;
+  keywords: string[];
+}
+
 function StockNews(props: StockNewsProps) {
-  const [news, setNews] = useState<any>({});
+  const [news, setNews] = useState<News>();
 
   useEffect(() => {
     getTickerNews(props.stock)
@@ -18,13 +29,19 @@ function StockNews(props: StockNewsProps) {
         console.log(e);
       });
   }, [props.stock]);
-  return (
-    <div>
-      {props.stock} NEWS:
-      {news.timestamp && <div>{news.timestamp.split('T')[0]}</div>}
-      <div>{news.summary}</div>
-    </div>
-  );
+  if (news) {
+    return (
+      <div>
+        {<div>{news.timestamp.split('T')[0]}</div>}
+        {news.title}
+
+        <div>{news.summary}</div>
+        <a href={news.url}>{news.url}</a>
+      </div>
+    );
+  } else {
+    return <></>;
+  }
 }
 
 export default StockNews;
