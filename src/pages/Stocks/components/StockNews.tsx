@@ -6,13 +6,13 @@ interface StockNewsProps {
 }
 
 function StockNews(props: StockNewsProps) {
-  const [summary, setSummary] = useState('');
+  const [news, setNews] = useState<any>({});
 
   useEffect(() => {
     getTickerNews(props.stock)
       .then((res: any) => {
         console.log(res);
-        setSummary(res[0].summary);
+        setNews(res[0]);
       })
       .catch((e: any) => {
         console.log(e);
@@ -21,7 +21,8 @@ function StockNews(props: StockNewsProps) {
   return (
     <div>
       {props.stock} NEWS:
-      <div>{summary}</div>
+      {news.timestamp && <div>{news.timestamp.split('T')[0]}</div>}
+      <div>{news.summary}</div>
     </div>
   );
 }
