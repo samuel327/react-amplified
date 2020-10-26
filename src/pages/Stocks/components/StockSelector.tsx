@@ -6,6 +6,8 @@ interface StockSelectorProps {
   setStock: Function;
 }
 
+const update = (val: string, set: Function) => set(val);
+
 export function StockSelector(props: StockSelectorProps) {
   const [options, setOptions] = useState<any>([]);
   const [search, setSearch] = useState<string>('');
@@ -22,32 +24,28 @@ export function StockSelector(props: StockSelectorProps) {
   return (
     <div>
       <div>
-        Search Company:
+        1) Search Company:
         <input
           value={search}
           onChange={(e) => {
             let val = e.target.value;
-            if (val !== '') {
-              setSearch(val);
-            }
+            update(val, setSearch);
           }}
         ></input>
-        <button
-          onClick={() => {
-            if (search !== '' && search) {
-              console.log(search);
-              if (search) setSearch(search);
-            }
-          }}
-        >
-          Add
-        </button>
       </div>
-      <label htmlFor="stockSelector"> Choose stock:</label>
+      <label htmlFor="stockSelector">
+        {' '}
+        2) Choose stock [this list gets updated]:
+      </label>
       <select
         id="stockSelector"
         value={props.stock}
         onChange={(e: any) => {
+          console.log(e);
+          let stock = e.target.value;
+          props.setStock(stock);
+        }}
+        onClick={(e: any) => {
           console.log(e);
           let stock = e.target.value;
           props.setStock(stock);
@@ -57,6 +55,7 @@ export function StockSelector(props: StockSelectorProps) {
         <option>TSLA</option>
         <option>AMZN</option>
         <option>AMD</option> */}
+        <option></option>
         {options.map((option: any) => {
           return <option>{option.ticker}</option>;
         })}
