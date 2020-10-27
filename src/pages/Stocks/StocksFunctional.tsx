@@ -4,6 +4,7 @@ import { getPolygonIOData } from '../../stockApis/polygon.io';
 import { StockSelector } from './components/StockSelector';
 import { Paper } from '@material-ui/core';
 import StockNews from './components/StockNews';
+import { RightDrawer } from './components/RightDrawer';
 
 function mapper(objArray: any) {
   let newArrayOfObjects = objArray.map((obj: any) => {
@@ -50,10 +51,11 @@ function StocksFunctional() {
       <div>
         {stock} TICKER GRAPH 2020-01-01 thru {today}
       </div>
-      <Paper style={{ margin: '5%' }}>
+      <Paper style={{ margin: '5%', width: 750 }}>
         {data && <Chart type={'hybrid'} data={data} stock={stock} />}
       </Paper>
       <StockNews stock={stock} />
+      <RightDrawer />
     </>
   );
 }
